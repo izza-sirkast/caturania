@@ -23,58 +23,94 @@ const chessPieces = [
     ['wr', 'wn', 'wb', 'wq', 'wk', 'wb', 'wn', 'wr']
 ]
 
-let gameState = 'neutral'; // neutral, pick
+let chessState = 'playerWTurn'; // playerBTurn, playerWTurn, playerBPick, playerWPick, end
+let pickedPiece = null; // structure: [row, col]
+let possibleMoves = []; // cache for possible moves of the picked piece, structure: [[row, col], [row, col], ...]
+let gameState = 'play'; // play, end
 
 function renderChess() {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-            ctx.fillStyle = (i + j) % 2 === 0 ? 'papayawhip' : 'peru';
+            ctx.fillStyle = (i + j) % 2 === 0 ? 'gray' : 'peru';
             ctx.fillRect(startX + j * tileSize, startY + i * tileSize, tileSize, tileSize); 
     
+            // Highlight the picked piece possible moves
+            if(chessState == 'playerWPick' && pickedPiece != null) {
+                let row = pickedPiece[0];
+                let col = pickedPiece[1];
+                switch(chessPieces[row][col]){
+                    case 'wp':
+                        ctx.fillStyle = 'yellow';
+                        possibleMoves = [
+                            [row - 1, col], // Move forward
+                        ]
+            
+                        for (let i = 0; i < possibleMoves.length; i++) {
+                            ctx.fillRect(startX + possibleMoves[i][1] * tileSize, startY + possibleMoves[i][0] * tileSize, tileSize, tileSize);
+                        }
+
+                }
+            }
+
             switch(chessPieces[i][j]) {
                 case 'bp':
                     ctx.fillStyle = 'black';
                     ctx.font = '40px Arial';
                     ctx.fillText('♟', startX + j * tileSize + 5, startY + i * tileSize + 40);
                     break;
+                case 'wp':
+                    ctx.fillStyle = 'white';
+                    ctx.font = '40px Arial';
+                    ctx.fillText('♙', startX + j * tileSize + 5, startY + i * tileSize + 40);
+                    break;
             }
+
         }
     }
 }
 
 
-renderChess();
-
-
-// Get cursor location value on every mouse move
-canvas.addEventListener('click', function(event) {
+function playerTurnListener (event) {
     let x = event.clientX - startX;
     let y = event.clientY - startY;
     let row = Math.floor(y / tileSize);
     let col = Math.floor(x / tileSize);
     console.log(`Row: ${row}, Col: ${col}`);
 
-    if(gameState === 'neutral') {
-        if(chessPieces[row][col] === ' ') {
-            console.log('Empty tile clicked!');
+    if(chessState === 'playerWTurn') {
+        let clickedPiece = chessPieces[row][col];
+
+        // Check if the clicked thing is not a white piece
+        if(clickedPiece !== 'wp' && clickedPiece !== 'wr' && clickedPiece !== 'wn' && clickedPiece !== 'wb' && clickedPiece !== 'wq' && clickedPiece !== 'wk') {
+            console.log('Not a white piece!');
+            chessState = 'playerWTurn';
             return;
         }
 
-        gameState = 'pick';
-    
-        switch(chessPieces[row][col]){
-            case 'bp':
-                ctx.fillStyle = 'yellow';
-                let allPossibleMoves = [
-                    [row + 1, col], // Move forward
-                ]
-
-                for (let i = 0; i < allPossibleMoves.length; i++) {
-                    console.log('tes')
-                    ctx.fillRect(startX + allPossibleMoves[i][1] * tileSize, startY + allPossibleMoves[i][0] * tileSize, tileSize, tileSize);
-                }
+        chessState = 'playerWPick';
+        pickedPiece = [row, col];
+    }else if(chessState == 'playerWPick') {
+        // Check if the clicked thing is not a possible move
+        const clickedIsPossibleMove = possibleMoves.some(move => move[0] === row && move[1] === col);
+        
+        if(!clickedIsPossibleMove) {
+            chessState = 'playerWTurn';
+            pickedPiece = null;
+            possibleMoves = [];    
         }
-    
     }
-});
+}
 
+let gameLoopInterval;
+
+function changeGameState(newState){
+    if(newState === 'play'){
+        canvas.addEventListener('click', playerTurnListener);
+
+        gameLoopInterval = setInterval(() => {
+            renderChess();
+        }, 10)
+    }
+}
+
+changeGameState('play');
