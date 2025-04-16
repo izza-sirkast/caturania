@@ -23,6 +23,10 @@ const chessPieces = [
     [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
 ]
 
+// All chess pieces variavble for comparison
+let allWhitePieces = ['wp', 'wr', 'wn', 'wb', 'wq', 'wk'];
+let allBlackPieces = ['bp', 'br', 'bn', 'bb', 'bq', 'bk'];
+
 let chessState = 'playerWTurn'; // playerBTurn, playerWTurn, playerBPick, playerWPick, end
 let pickedPiece = null; // structure: [row, col]
 let possibleMoves = []; // cache for possible moves of the picked piece, structure: [[row, col], [row, col], ...]
@@ -56,11 +60,13 @@ function renderChess() {
                             }
                         }
 
-                        // Check if there is a piece in diagonal way
-                        if(chessPieces[row - 1][col - 1] !== undefined && chessPieces[row - 1][col - 1]?.piece !== ' ') {
+                        // Check if there is a black piece in diagonal way
+                        let diagonalLeft = chessPieces[row - 1][col - 1]
+                        if(diagonalLeft !== undefined && allBlackPieces.includes(diagonalLeft.piece)) {
                             possibleMoves.push([row - 1, col - 1, 'eat']); // Move diagonal left
                         }
-                        if(chessPieces[row - 1][col + 1] !== undefined && chessPieces[row - 1][col + 1]?.piece !== ' ') {
+                        let diagonalRight = chessPieces[row - 1][col + 1]
+                        if(diagonalRight !== undefined && allBlackPieces.includes(diagonalRight.piece)) {
                             possibleMoves.push([row - 1, col + 1, 'eat']); // Move diagonal right
                         }
             
@@ -72,6 +78,7 @@ function renderChess() {
                             }else{
                                 ctx.fillStyle = "rgba(36 227 182 / 7%)";
                             }
+                            
                             ctx.fillRect(startX + possibleMoves[i][1] * tileSize, startY + possibleMoves[i][0] * tileSize, tileSize, tileSize);
                         }
 
@@ -95,8 +102,25 @@ function renderChess() {
                                 [row + 1, col], // Move forward
                             ]
                         }
+
+                        // Check if there is a white piece in diagonal way
+                        let diagonalLeft = chessPieces[row + 1][col - 1]
+                        if(diagonalLeft !== undefined && allWhitePieces.includes(diagonalLeft.piece)) {
+                            possibleMoves.push([row + 1, col - 1, 'eat']); // Move diagonal left
+                        }
+                        let diagonalRight = chessPieces[row + 1][col + 1]
+                        if(diagonalRight !== undefined && allWhitePieces.includes(diagonalRight.piece)) {
+                            possibleMoves.push([row + 1, col + 1, 'eat']); // Move diagonal right
+                        }
             
                         for (let i = 0; i < possibleMoves.length; i++) {
+                            // If eat, fill with red
+                            if(possibleMoves[i][2] == 'eat') {
+                                ctx.fillStyle = "rgba(171 25 12 / 2%)";
+                            }else{
+                                ctx.fillStyle = "rgba(36 227 182 / 7%)";
+                            }
+
                             ctx.fillRect(startX + possibleMoves[i][1] * tileSize, startY + possibleMoves[i][0] * tileSize, tileSize, tileSize);
                         }
 
