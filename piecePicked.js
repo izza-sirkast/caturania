@@ -23,6 +23,14 @@ export function determinePossibleMoves(piece, isWhite, row, col, chessState) {
         case 'bb':
             bishopPossibleMoves(isWhite, row, col, chessState);
             break;
+        case 'wq':
+        case 'bq':
+            queenPossibleMoves(isWhite, row, col, chessState);
+            break;
+        case 'wk':
+        case 'bk':
+            kingPossibleMoves(isWhite, row, col, chessState);
+            break;
     }
 }
 
@@ -296,4 +304,34 @@ function bishopPossibleMoves(isWhite, row, col, chessState) {
         }
     }
 
+}
+
+function queenPossibleMoves(isWhite, row, col, chessState) {
+    // Determine possible moves for queen
+    rookPossibleMoves(isWhite, row, col, chessState);
+    bishopPossibleMoves(isWhite, row, col, chessState);
+}
+
+function kingPossibleMoves(isWhite, row, col, chessState){
+    // Determine possible moves for king
+    let kingMoves = [
+        [row - 1, col - 1], [row - 1, col], [row - 1, col + 1],
+        [row, col - 1], [row, col + 1],
+        [row + 1, col - 1], [row + 1, col], [row + 1, col + 1]
+    ];
+
+    for(let i = 0; i < kingMoves.length; i++) {
+        let move = kingMoves[i];
+        let row = move[0];
+        let col = move[1];
+        if(row >= 0 && row <= 7 && col >= 0 && col <= 7) {
+            if(chessState.chessPieces[row][col].piece === ' ') {
+                chessState.chessPieces[row][col].boardState = 'move';
+            }else if(isWhite && allBlackPieces.includes(chessState.chessPieces[row][col].piece)) {
+                chessState.chessPieces[row][col].boardState = 'eat';
+            }else if(!isWhite && allWhitePieces.includes(chessState.chessPieces[row][col].piece)) {
+                chessState.chessPieces[row][col].boardState = 'eat';
+            }
+        }
+    }
 }
