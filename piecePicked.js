@@ -9,20 +9,24 @@ export function determinePossibleMoves(piece, isWhite, row, col, chessState) {
     switch(piece) {
         case 'wp':
         case 'bp':
-            pawnPicked(isWhite, row, col, chessState);
+            pawnPossibleMoves(isWhite, row, col, chessState);
             break;
         case 'wr':
         case 'br':
-            rookPicked(isWhite, row, col, chessState);
+            rookPossibleMoves(isWhite, row, col, chessState);
             break;
         case 'wn':
         case 'bn':
-            knightPicked(isWhite, row, col, chessState);
+            knightPossibleMoves(isWhite, row, col, chessState);
+            break;
+        case 'wb':
+        case 'bb':
+            bishopPossibleMoves(isWhite, row, col, chessState);
             break;
     }
 }
 
-function pawnPicked(isWhite, row, col, chessState) {
+function pawnPossibleMoves(isWhite, row, col, chessState) {
     if(isWhite){ // Determine possible moves for white pawn
         // Check if there is a piece in the way
         if(chessState.chessPieces[row - 1][col].piece === ' ') {
@@ -67,7 +71,7 @@ function pawnPicked(isWhite, row, col, chessState) {
     }    
 }
 
-function rookPicked(isWhite, row, col, chessState) {
+function rookPossibleMoves(isWhite, row, col, chessState) {
     // Determine possible moves for rook
     if(isWhite){
         // Determine possible up moves
@@ -170,7 +174,7 @@ function rookPicked(isWhite, row, col, chessState) {
 
 }
 
-function knightPicked(isWhite, row, col, chessState) {
+function knightPossibleMoves(isWhite, row, col, chessState) {
     // Determine possible moves for knight
     let knightMoves = [
         [row - 2, col - 1], [row - 2, col + 1],
@@ -195,4 +199,101 @@ function knightPicked(isWhite, row, col, chessState) {
     }
 
     console.log(chessState.chessPieces)
+}
+
+function bishopPossibleMoves(isWhite, row, col, chessState) {
+    // Determine possible moves for bishop
+    if(isWhite){
+        // Determine possible up left moves
+        for(let i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+        // Determine possible up right moves
+        for(let i = row - 1, j = col + 1; i >= 0 && j <= 7; i--, j++) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+        // Determine possible down left moves
+        for(let i = row + 1, j = col - 1; i <= 7 && j >= 0; i++, j--) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+        // Determine possible down right moves
+        for(let i = row + 1, j = col + 1; i <= 7 && j <= 7; i++, j++) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }
+            else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+    }else { // Determine possible moves for black bishop
+        // Determine possible up left moves
+        for(let i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+        // Determine possible up right moves
+        for(let i = row - 1, j = col + 1; i >= 0 && j <= 7; i--, j++) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+        // Determine possible down left moves
+        for(let i = row + 1, j = col - 1; i <= 7 && j >= 0; i++, j--) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+        // Determine possible down right moves
+        for(let i = row + 1, j = col + 1; i <= 7 && j <= 7; i++, j++) {
+            if(chessState.chessPieces[i][j].piece === ' '){
+                chessState.chessPieces[i][j].boardState = 'move';
+            }else if(allWhitePieces.includes(chessState.chessPieces[i][j].piece)){
+                chessState.chessPieces[i][j].boardState = 'eat';
+                break;
+            }else if(allBlackPieces.includes(chessState.chessPieces[i][j].piece)){
+                break;
+            }
+        }
+    }
+
 }

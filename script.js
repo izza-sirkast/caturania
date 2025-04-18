@@ -31,14 +31,14 @@ let chessState = {
     //     [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
     // ],
     chessPieces: [
-        [{piece:' '},  {piece:'bn'}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'bn'}, {piece:' '}],
+        [{piece:' '},  {piece:' '}, {piece:'bb'}, {piece:' '}, {piece:' '}, {piece:'bb'}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-        [{piece:' '}, {piece:'wn'}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'wn'}, {piece:' '}]
+        [{piece:' '}, {piece:' '}, {piece:'wb'}, {piece:' '}, {piece:' '}, {piece:'wb'}, {piece:' '}, {piece:' '}]
     ],
     pickedPiece: null, // structure: [row, col],
 }
@@ -67,6 +67,7 @@ function renderChess() {
             }
 
             switch(chessState.chessPieces[i][j].piece) {
+                // Black pieces
                 case 'bp':
                     canvasState.ctx.fillStyle = 'black';
                     canvasState.ctx.font = '40px Arial';
@@ -82,6 +83,13 @@ function renderChess() {
                     canvasState.ctx.font = '40px Arial';
                     canvasState.ctx.fillText('♞', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
                     break;
+                case 'bb':
+                    canvasState.ctx.fillStyle = 'black';
+                    canvasState.ctx.font = '40px Arial';
+                    canvasState.ctx.fillText('♗', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
+                    break;
+
+                // White Pieces
                 case 'wp':
                     canvasState.ctx.fillStyle = 'white';
                     canvasState.ctx.font = '40px Arial';
@@ -96,6 +104,11 @@ function renderChess() {
                     canvasState.ctx.fillStyle = 'white';
                     canvasState.ctx.font = '40px Arial';
                     canvasState.ctx.fillText('♘', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
+                    break;
+                case 'wb':
+                    canvasState.ctx.fillStyle = 'white';
+                    canvasState.ctx.font = '40px Arial';
+                    canvasState.ctx.fillText('♗', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
                     break;
             }
 
