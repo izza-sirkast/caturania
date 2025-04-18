@@ -15,6 +15,10 @@ export function determinePossibleMoves(piece, isWhite, row, col, chessState) {
         case 'br':
             rookPicked(isWhite, row, col, chessState);
             break;
+        case 'wn':
+        case 'bn':
+            knightPicked(isWhite, row, col, chessState);
+            break;
     }
 }
 
@@ -162,4 +166,33 @@ function rookPicked(isWhite, row, col, chessState) {
             }
         }
     }
+
+
+}
+
+function knightPicked(isWhite, row, col, chessState) {
+    // Determine possible moves for knight
+    let knightMoves = [
+        [row - 2, col - 1], [row - 2, col + 1],
+        [row - 1, col - 2], [row - 1, col + 2],
+        [row + 1, col - 2], [row + 1, col + 2],
+        [row + 2, col - 1], [row + 2, col + 1]
+    ];
+
+    for(let i = 0; i < knightMoves.length; i++) {
+        let move = knightMoves[i];
+        let row = move[0];
+        let col = move[1];
+        if(row >= 0 && row <= 7 && col >= 0 && col <= 7) {
+            if(chessState.chessPieces[row][col].piece === ' ') {
+                chessState.chessPieces[row][col].boardState = 'move';
+            }else if(isWhite && allBlackPieces.includes(chessState.chessPieces[row][col].piece)) {
+                chessState.chessPieces[row][col].boardState = 'eat';
+            }else if(!isWhite && allWhitePieces.includes(chessState.chessPieces[row][col].piece)) {
+                chessState.chessPieces[row][col].boardState = 'eat';
+            }
+        }
+    }
+
+    console.log(chessState.chessPieces)
 }
