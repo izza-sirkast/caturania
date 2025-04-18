@@ -1,4 +1,4 @@
-import { allBlackPieces, allWhitePieces, pawnPicked, rookPicked } from './piecePicked.js';
+import { allBlackPieces, allWhitePieces, determinePossibleMoves } from './piecePicked.js';
 
 let canvas = document.getElementById('chezz');
 
@@ -31,14 +31,14 @@ let chessState = {
     //     [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
     // ],
     chessPieces: [
-        [{piece:'br'},  {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'br'}],
+        [{piece:' '},  {piece:'bn'}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'bn'}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-        [{piece:'wr'}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'wr'}]
+        [{piece:' '}, {piece:'wn'}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'wn'}, {piece:' '}]
     ],
     pickedPiece: null, // structure: [row, col],
 }
@@ -77,6 +77,11 @@ function renderChess() {
                     canvasState.ctx.font = '40px Arial';
                     canvasState.ctx.fillText('♖', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
                     break;
+                case 'bn':
+                    canvasState.ctx.fillStyle = 'black';
+                    canvasState.ctx.font = '40px Arial';
+                    canvasState.ctx.fillText('♞', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
+                    break;
                 case 'wp':
                     canvasState.ctx.fillStyle = 'white';
                     canvasState.ctx.font = '40px Arial';
@@ -86,6 +91,11 @@ function renderChess() {
                     canvasState.ctx.fillStyle = 'white';
                     canvasState.ctx.font = '40px Arial';
                     canvasState.ctx.fillText('♖', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
+                    break;
+                case 'wn':
+                    canvasState.ctx.fillStyle = 'white';
+                    canvasState.ctx.font = '40px Arial';
+                    canvasState.ctx.fillText('♘', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
                     break;
             }
 
@@ -121,14 +131,7 @@ function playerMoveListener (event) {
         chessState.state = 'playerWPick';
         chessState.pickedPiece = [row, col];
 
-        switch(chessState.chessPieces[row][col].piece){
-            case 'wp':
-                pawnPicked(true, row, col, chessState, canvasState);
-                break;
-            case 'wr':
-                rookPicked(true, row, col, chessState);
-                break;
-        }
+        determinePossibleMoves(chessState.chessPieces[row][col].piece, true, row, col, chessState);
     }else if(chessState.state === 'playerBTurn'){
         let clickedPiece = chessState.chessPieces[row][col].piece;
 
@@ -142,14 +145,7 @@ function playerMoveListener (event) {
         chessState.state = 'playerBPick';
         chessState.pickedPiece = [row, col];
 
-        switch(chessState.chessPieces[row][col].piece){
-            case 'bp':
-                pawnPicked(false, row, col, chessState, canvasState);
-                break;
-            case 'br':
-                rookPicked(false, row, col, chessState);
-                break;
-        }
+        determinePossibleMoves(chessState.chessPieces[row][col].piece, false, row, col, chessState);
     }else if(chessState.state == 'playerWPick') {
         // Check if the clicked thing is not a possible move
         const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat')
