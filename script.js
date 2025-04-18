@@ -1,4 +1,4 @@
-import { pawnPicked } from './piecePicked.js';
+import { allBlackPieces, allWhitePieces, pawnPicked, rookPicked } from './piecePicked.js';
 
 let canvas = document.getElementById('chezz');
 
@@ -20,46 +20,50 @@ let gameState = 'play'; // play, end
 // Chess State
 let chessState = {
     state: 'playerWTurn', // playerBTurn, playerWTurn, playerBPick, playerWPick, end
+    // chessPieces: [
+    //     [{piece:'br'}, {piece:'bn'}, {piece:'bb'}, {piece:'bq'}, {piece:'bk'}, {piece:'bb'}, {piece:'bn'}, {piece:'br'}],
+    //     [{piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
+    //     [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
+    // ],
     chessPieces: [
-        [{piece:'br'}, {piece:'bn'}, {piece:'bb'}, {piece:'bq'}, {piece:'bk'}, {piece:'bb'}, {piece:'bn'}, {piece:'br'}],
-        [{piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}],
+        [{piece:'br'},  {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'br'}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-        [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
-        [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
+        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:'wr'}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'wr'}]
     ],
     pickedPiece: null, // structure: [row, col],
-    possibleMoves: [], // cache for possible moves of the picked piece, structure: [[row, col], [row, col], ...],
 }
 
 // ========================================VARIABLES========================================>>
 
 
 function renderChess() {
+    // Clear the canvas
+    canvasState.ctx.clearRect(0, 0, canvasState.ctx.canvas.width, canvasState.ctx.canvas.height);
+
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             canvasState.ctx.fillStyle = (i + j) % 2 === 0 ? 'gray' : 'peru';
             canvasState.ctx.fillRect(canvasState.startX + j * canvasState.tileSize, canvasState.startY + i * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
-    
-            // Highlight the picked piece possible moves
-            if(chessState.state == 'playerWPick' && chessState.pickedPiece != null) {
-                let row = chessState.pickedPiece[0];
-                let col = chessState.pickedPiece[1];
-                switch(chessState.chessPieces[row][col].piece){
-                    case 'wp':
-                        pawnPicked(true, row, col, chessState, canvasState);
-                        break;
+
+            if(chessState.chessPieces[i][j].boardState !== undefined) {
+                // Render only once
+                if(chessState.chessPieces[i][j].boardState == 'move'){
+                    canvasState.ctx.fillStyle = "rgba(36 227 182 / 30%)";
+                }else if(chessState.chessPieces[i][j].boardState == 'eat'){
+                    canvasState.ctx.fillStyle = "rgba(171 25 12 / 30%)";
                 }
-            }else if(chessState.state == 'playerBPick' && chessState.pickedPiece != null) {
-                let row = chessState.pickedPiece[0];
-                let col = chessState.pickedPiece[1];
-                switch(chessState.chessPieces[row][col].piece){
-                    case 'bp':
-                        pawnPicked(false, row, col, chessState, canvasState);
-                        break;
-                }
+
+                canvasState.ctx.fillRect(canvasState.startX + j * canvasState.tileSize, canvasState.startY + i * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
             }
 
             switch(chessState.chessPieces[i][j].piece) {
@@ -68,10 +72,20 @@ function renderChess() {
                     canvasState.ctx.font = '40px Arial';
                     canvasState.ctx.fillText('♟', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
                     break;
+                case 'br':
+                    canvasState.ctx.fillStyle = 'black';
+                    canvasState.ctx.font = '40px Arial';
+                    canvasState.ctx.fillText('♖', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
+                    break;
                 case 'wp':
                     canvasState.ctx.fillStyle = 'white';
                     canvasState.ctx.font = '40px Arial';
                     canvasState.ctx.fillText('♙', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
+                    break;
+                case 'wr':
+                    canvasState.ctx.fillStyle = 'white';
+                    canvasState.ctx.font = '40px Arial';
+                    canvasState.ctx.fillText('♖', canvasState.startX + j * canvasState.tileSize + 5, canvasState.startY + i * canvasState.tileSize + 40);
                     break;
             }
 
@@ -79,19 +93,26 @@ function renderChess() {
     }
 }
 
+function neutralizeBoardState() {
+    for (let i = 0; i < chessState.chessPieces.length; i++) {
+        for (let j = 0; j < chessState.chessPieces[i].length; j++) {
+            chessState.chessPieces[i][j].boardState = undefined;
+        }
+    }
+}
 
 function playerMoveListener (event) {
     let x = event.clientX - canvasState.startX;
     let y = event.clientY - canvasState.startY;
     let row = Math.floor(y / canvasState.tileSize);
     let col = Math.floor(x / canvasState.tileSize);
-    console.log(`Row: ${row}, Col: ${col}`);
+    console.log(`${chessState.state} cliked on Row: ${row}, Col: ${col}`);
 
     if(chessState.state === 'playerWTurn') {
         let clickedPiece = chessState.chessPieces[row][col].piece;
 
         // Check if the clicked thing is not a white piece
-        if(clickedPiece !== 'wp' && clickedPiece !== 'wr' && clickedPiece !== 'wn' && clickedPiece !== 'wb' && clickedPiece !== 'wq' && clickedPiece !== 'wk') {
+        if(!allWhitePieces.includes(clickedPiece)) {
             console.log('Not a white piece!');
             chessState.state = 'playerWTurn';
             return;
@@ -99,11 +120,20 @@ function playerMoveListener (event) {
 
         chessState.state = 'playerWPick';
         chessState.pickedPiece = [row, col];
+
+        switch(chessState.chessPieces[row][col].piece){
+            case 'wp':
+                pawnPicked(true, row, col, chessState, canvasState);
+                break;
+            case 'wr':
+                rookPicked(true, row, col, chessState);
+                break;
+        }
     }else if(chessState.state === 'playerBTurn'){
         let clickedPiece = chessState.chessPieces[row][col].piece;
 
         // Check if the clicked thing is not a black piece
-        if(clickedPiece !== 'bp' && clickedPiece !== 'br' && clickedPiece !== 'bn' && clickedPiece !== 'bb' && clickedPiece !== 'bq' && clickedPiece !== 'bk') {
+        if(!allBlackPieces.includes(clickedPiece)) {
             console.log('Not a black piece!');
             chessState.state = 'playerBTurn';
             return;
@@ -111,16 +141,28 @@ function playerMoveListener (event) {
 
         chessState.state = 'playerBPick';
         chessState.pickedPiece = [row, col];
+
+        switch(chessState.chessPieces[row][col].piece){
+            case 'bp':
+                pawnPicked(false, row, col, chessState, canvasState);
+                break;
+            case 'br':
+                rookPicked(false, row, col, chessState);
+                break;
+        }
     }else if(chessState.state == 'playerWPick') {
         // Check if the clicked thing is not a possible move
-        const clickedIsPossibleMove = chessState.possibleMoves.some(move => move[0] === row && move[1] === col);
-        
+        const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat')
         if(!clickedIsPossibleMove) {
             chessState.state = 'playerWTurn';
             chessState.pickedPiece = null;
-            chessState.possibleMoves = [];
+            // Neutralize the board state
+            neutralizeBoardState();
             return;    
         }
+
+        // Neutralize the board state
+        neutralizeBoardState();
 
         let fromRow = chessState.pickedPiece[0];
         let fromCol = chessState.pickedPiece[1];
@@ -133,18 +175,20 @@ function playerMoveListener (event) {
         chessState.chessPieces[row][col] = chessState.chessPieces[fromRow][fromCol];
         chessState.chessPieces[fromRow][fromCol] = {piece: ' '};
         chessState.pickedPiece = null;
-        chessState.possibleMoves = [];
         chessState.state = 'playerBTurn';
     }else if(chessState.state == 'playerBPick') {
         // Check if the clicked thing is not a possible move
-        const clickedIsPossibleMove = chessState.possibleMoves.some(move => move[0] === row && move[1] === col);
-        
+        const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat')
         if(!clickedIsPossibleMove) {
             chessState.state = 'playerBTurn';
             chessState.pickedPiece = null;
-            chessState.possibleMoves = [];
+            // Neutralize the board state
+            neutralizeBoardState();
             return;    
         }
+
+        // Neutralize the board state
+        neutralizeBoardState();
 
         let fromRow = chessState.pickedPiece[0];
         let fromCol = chessState.pickedPiece[1];
@@ -156,10 +200,7 @@ function playerMoveListener (event) {
         // Move the piece
         chessState.chessPieces[row][col].piece = chessState.chessPieces[fromRow][fromCol].piece;
         chessState.chessPieces[fromRow][fromCol].piece = ' ';
-        
-
         chessState.pickedPiece = null;
-        chessState.possibleMoves = [];
         chessState.state = 'playerWTurn';
     }
 }
