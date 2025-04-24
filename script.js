@@ -1,5 +1,3 @@
-import { allWhitePieces, allBlackPieces } from './constants/chessConstants.js';
-import { determinePossibleMoves } from './determinePossibleMoves.js';
 import { handlePlayerTurn, handlePlayerPick } from './handlePlayerEvent.js';
 
 let canvas = document.getElementById('chezz');
@@ -16,8 +14,6 @@ canvasState.startY = window.innerHeight / 2 - (canvasState.tileSize * 8) / 2,
 canvasState.ctx.canvas.width = window.innerWidth;
 canvasState.ctx.canvas.height = window.innerHeight;
 
-// Game State
-let gameState = 'play'; // play, end
 
 // Chess State
 let chessState = {
@@ -142,14 +138,6 @@ function renderChess() {
     }
 }
 
-function neutralizeBoardState() {
-    for (let i = 0; i < chessState.chessPieces.length; i++) {
-        for (let j = 0; j < chessState.chessPieces[i].length; j++) {
-            chessState.chessPieces[i][j].boardState = undefined;
-        }
-    }
-}
-
 function playerMoveListener (event) {
     let x = event.clientX - canvasState.startX;
     let y = event.clientY - canvasState.startY;
@@ -163,60 +151,6 @@ function playerMoveListener (event) {
     }else if(chessState.state === 'playerWPick' || chessState.state === 'playerBPick') {
         handlePlayerPick(chessState, {row, col});
     }
-    
-    // else if(chessState.state == 'playerWPick') {
-    //     // Check if the clicked thing is not a possible move
-    //     const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat')
-    //     if(!clickedIsPossibleMove) {
-    //         chessState.state = 'playerWTurn';
-    //         chessState.pickedPiece = null;
-    //         // Neutralize the board state
-    //         neutralizeBoardState();
-    //         return;    
-    //     }
-
-    //     // Neutralize the board state
-    //     neutralizeBoardState();
-
-    //     let fromRow = chessState.pickedPiece[0];
-    //     let fromCol = chessState.pickedPiece[1];
-    //     // Check if the piece is a pawn and if it moved two steps
-    //     if(chessState.chessPieces[fromRow][fromCol].piece == 'wp' && Math.abs(row - fromRow) == 2){
-    //         chessState.chessPieces[fromRow][fromCol].twoStepUsed = true;
-    //     }
-
-    //     // Move the piece
-    //     chessState.chessPieces[row][col] = chessState.chessPieces[fromRow][fromCol];
-    //     chessState.chessPieces[fromRow][fromCol] = {piece: ' '};
-    //     chessState.pickedPiece = null;
-    //     chessState.state = 'playerBTurn';
-    // }else if(chessState.state == 'playerBPick') {
-    //     // Check if the clicked thing is not a possible move
-    //     const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat')
-    //     if(!clickedIsPossibleMove) {
-    //         chessState.state = 'playerBTurn';
-    //         chessState.pickedPiece = null;
-    //         // Neutralize the board state
-    //         neutralizeBoardState();
-    //         return;    
-    //     }
-
-    //     // Neutralize the board state
-    //     neutralizeBoardState();
-
-    //     let fromRow = chessState.pickedPiece[0];
-    //     let fromCol = chessState.pickedPiece[1];
-    //     // Check if the piece is a pawn and if it moved two steps
-    //     if(chessState.chessPieces[fromRow][fromCol].piece == 'bp' && Math.abs(row - fromRow) == 2){
-    //         chessState.chessPieces[fromRow][fromCol].twoStepUsed = true;
-    //     }
-
-    //     // Move the piece
-    //     chessState.chessPieces[row][col].piece = chessState.chessPieces[fromRow][fromCol].piece;
-    //     chessState.chessPieces[fromRow][fromCol].piece = ' ';
-    //     chessState.pickedPiece = null;
-    //     chessState.state = 'playerWTurn';
-    // }
 }
 
 let gameLoopInterval = null;
