@@ -58,6 +58,18 @@ function pawnPossibleMoves(isWhite, row, col, chessState) {
             chessState.chessPieces[row - 1][col + 1].boardState = 'eat'; // Move diagonal up right
         }
 
+        // Check if there possible en passant move
+        let enPassantLeft = chessState.chessPieces[row][col - 1]
+        if(enPassantLeft !== undefined && enPassantLeft.piece === 'bp' && chessState.enPassant.location?.row === row && chessState.enPassant.location?.col === col - 1) {
+            chessState.chessPieces[row - 1][col - 1].boardState = 'enPassant';
+        }
+        // Check if there possible en passant move
+        let enPassantRight = chessState.chessPieces[row][col + 1]
+        if(enPassantRight !== undefined && enPassantRight.piece === 'bp' && chessState.enPassant.location?.row === row && chessState.enPassant.location?.col === col + 1) {
+            chessState.chessPieces[row - 1][col + 1].boardState = 'enPassant';
+        }
+
+
     }else { // Determine possible moves for black pawn
         // Check if there is a piece in the way 
         if(chessState.chessPieces[row + 1][col].piece === ' ') {
@@ -77,6 +89,17 @@ function pawnPossibleMoves(isWhite, row, col, chessState) {
         let diagonalRight = chessState.chessPieces[row + 1][col + 1]
         if(diagonalRight !== undefined && allWhitePieces.includes(diagonalRight.piece)) {
             chessState.chessPieces[row + 1][col + 1].boardState = 'eat'; // Move diagonal down right
+        }
+
+        // Check if there possible en passant move
+        let enPassantLeft = chessState.chessPieces[row][col - 1]
+        if(enPassantLeft !== undefined && enPassantLeft.piece === 'wp' && chessState.enPassant.location?.row === row && chessState.enPassant.location?.col === col - 1) {
+            chessState.chessPieces[row + 1][col - 1].boardState = 'enPassant';
+        }
+        // Check if there possible en passant move
+        let enPassantRight = chessState.chessPieces[row][col + 1]
+        if(enPassantRight !== undefined && enPassantRight.piece === 'wp' && chessState.enPassant.location?.row === row && chessState.enPassant.location?.col === col + 1) {
+            chessState.chessPieces[row + 1][col + 1].boardState = 'enPassant';
         }
     }    
 }

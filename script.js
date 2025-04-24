@@ -45,7 +45,7 @@ let chessState = {
     pickedPiece: null, // structure: [row, col],
     enPassant: {
         location: null, // structure: { row, col }
-        enPassantSignal: false, // true to tell if the player do en passant move
+        signal: false, // true to tell if the player do en passant move
     }
 }
 
@@ -65,7 +65,7 @@ function renderChess() {
                 // Render only once
                 if(chessState.chessPieces[i][j].boardState == 'move'){
                     canvasState.ctx.fillStyle = "rgba(36 227 182 / 30%)";
-                }else if(chessState.chessPieces[i][j].boardState == 'eat'){
+                }else if(chessState.chessPieces[i][j].boardState == 'eat' || chessState.chessPieces[i][j].boardState == 'enPassant'){
                     canvasState.ctx.fillStyle = "rgba(171 25 12 / 30%)";
                 }
 

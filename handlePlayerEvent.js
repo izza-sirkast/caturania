@@ -32,7 +32,7 @@ export function handlePlayerPick(chessState, move) {
     const { row, col } = move;
 
     // == Check if the clicked thing is not a possible move ==
-    const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat')
+    const clickedIsPossibleMove = chessState.chessPieces[row][col].boardState !== undefined && (chessState.chessPieces[row][col].boardState === 'move' || chessState.chessPieces[row][col].boardState === 'eat' || chessState.chessPieces[row][col].boardState === 'enPassant')
 
     if(!clickedIsPossibleMove) {
         // Change state back to player turn
@@ -45,28 +45,43 @@ export function handlePlayerPick(chessState, move) {
     }
 
 
-    // Neutralize the board state
-    neutralizeBoardState(chessState);
-
-
     // == Special condition ==
     let fromRow = chessState.pickedPiece[0];
     let fromCol = chessState.pickedPiece[1];
     const piece = chessState.chessPieces[fromRow][fromCol].piece;
 
-    // Check if the piece is a pawn and if it moved two steps
-    if((piece === 'wp' || piece === 'bp') && Math.abs(row - fromRow) == 2){
+     // reset possible en passant to null
+     chessState.enPassant.location = null;
+
+    // Check if the piece is a pawn
+    if(piece === 'wp' || piece === 'bp'){
         chessState.chessPieces[fromRow][fromCol].twoStepUsed = true;
-        
-        // Signalling that there is possible en passant
-        chessState.enPassant.location = [row, col];
+       
+        // Signalling that there is possible en passant if the pawn moved two steps
+        if(Math.abs(row - fromRow) == 2) {
+            chessState.enPassant.location = {row, col};
+        }
     }
+
+    // Check for en passant move
+    if(chessState.chessPieces[row][col].boardState === 'enPassant') {
+        if(chessState.state === 'playerWPick') {
+            chessState.chessPieces[row + 1][col] = {piece: ' '};
+        }else if(chessState.state === 'playerBPick') {
+            chessState.chessPieces[row - 1][col] = {piece: ' '};
+        }
+    } 
+
+
+    // Neutralize the board state
+    neutralizeBoardState(chessState);
 
 
     // == Move the piece ==
     chessState.chessPieces[row][col] = chessState.chessPieces[fromRow][fromCol];
     chessState.chessPieces[fromRow][fromCol] = {piece: ' '};
     chessState.pickedPiece = null;
+
     chessState.state = chessState.state === 'playerWPick' ? 'playerBTurn' : 'playerWTurn';
 }
 
