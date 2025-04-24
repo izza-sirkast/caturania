@@ -1,11 +1,13 @@
+import { allWhitePieces, allBlackPieces } from './constants/chessConstants.js'; // Import the constants for piece colors
+
 // Functions to determine possible moves for each piece and also highlight them on the canvas
 // These functions are called when a piece is picked and the possible moves are calculated based on the piece type and position
 
-// All chess pieces variavble for comparison
-export let allWhitePieces = ['wp', 'wr', 'wn', 'wb', 'wq', 'wk'];
-export let allBlackPieces = ['bp', 'br', 'bn', 'bb', 'bq', 'bk'];
+export function determinePossibleMoves(chessState, move) {
+    const { row, col } = move; 
+    const piece = chessState.chessPieces[row][col].piece; // Get the piece type from the chess state
+    const isWhite = allWhitePieces.includes(piece); // Determine if the piece is white or black
 
-export function determinePossibleMoves(piece, isWhite, row, col, chessState) {
     switch(piece) {
         case 'wp':
         case 'bp':
@@ -205,8 +207,6 @@ function knightPossibleMoves(isWhite, row, col, chessState) {
             }
         }
     }
-
-    console.log(chessState.chessPieces)
 }
 
 function bishopPossibleMoves(isWhite, row, col, chessState) {
