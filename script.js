@@ -1,5 +1,7 @@
 import { renderChess, playerMoveListener } from './chess/chessScript.js';
 import { chessState, initChessCanvasState } from './chess/chessVars.js';
+import { menuEventListener } from './menu/menuEventListener.js';
+import { renderMenu } from './menu/menuScript.js';
 import { initMenuCanvasState } from './menu/menuVars.js';
 
 let canvas = document.getElementById('chezz');
@@ -8,32 +10,40 @@ ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
 let chessCanvasState = initChessCanvasState(ctx);
-
 let menuCanvasState = initMenuCanvasState(ctx);
 
 let gameLoopInterval = null;
 
+function handlePlayerMoveClick(event) {
+    playerMoveListener(event, chessCanvasState, chessState)
+}
+
+function handleMenuClick(event) {
+    menuEventListener(event, menuCanvasState)
+}
+
 export function changeGameState(newState){
+    canvas.removeEventListener('click', handleMenuClick);
+    canvas.removeEventListener('click', handlePlayerMoveClick);
+    clearInterval(gameLoopInterval);
+
     if(newState === 'play'){
-        canvas.addEventListener('click', (event) => playerMoveListener(event, chessCanvasState, chessState));
+
+        canvas.addEventListener('click', handlePlayerMoveClick);
 
         gameLoopInterval = setInterval(() => {
             renderChess(chessCanvasState, chessState);
         }, 10)
     }else if(newState === 'menu'){
-        canvas.removeEventListener('click', (event) => playerMoveListener(event, canvasState, chessState));
-        clearInterval(gameLoopInterval);
+        // == Menu event listener ==
+        // hover listener
 
-        menuCanvasState.ctx.clearRect(0, 0, menuCanvasState.ctx.canvas.width, menuCanvasState.ctx.canvas.height);
-        menuCanvasState.ctx.fillStyle = 'black';
-        menuCanvasState.ctx.font = '40px Arial';
-        menuCanvasState.ctx.fillText('Chess Game', window.innerWidth / 2 - 100, window.innerHeight / 2 - 70);
+        // click listener
+        canvas.addEventListener('click', handleMenuClick);
 
-        // Draw start button
-        menuCanvasState.ctx.fillStyle = 'blue';
-        menuCanvasState.ctx.fillRect(menuCanvasState.startButton.x, menuCanvasState.startButton.y, menuCanvasState.startButton.width, menuCanvasState.startButton.height);
-        menuCanvasState.ctx.fillStyle = 'white';
-        menuCanvasState.ctx.fillText('Start', menuCanvasState.startButton.x + 62, menuCanvasState.startButton.y + 33);
+        gameLoopInterval = setInterval(() => {
+            renderMenu(menuCanvasState);
+        }, 10);    
     }
 }
 
