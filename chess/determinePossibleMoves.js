@@ -1,4 +1,4 @@
-import { allWhitePieces, allBlackPieces } from './constants/chessConstants.js'; // Import the constants for piece colors
+import { allWhitePieces, allBlackPieces } from './chessVars.js'; // Import the constants for piece colors
 
 // Functions to determine possible moves for each piece and also highlight them on the canvas
 // These functions are called when a piece is picked and the possible moves are calculated based on the piece type and position

@@ -1,4 +1,4 @@
-import { allWhitePieces, allBlackPieces } from './constants/chessConstants.js';
+import { allWhitePieces, allBlackPieces } from './chessVars.js';
 import { determinePossibleMoves } from './determinePossibleMoves.js';
 
 // Handle player mouse click when it's their turn (when player pick a piece but hasn't moved it yet)
