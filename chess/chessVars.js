@@ -30,3 +30,14 @@ export let chessState = {
         signal: false, // true to tell if the player do en passant move
     }
 }
+
+export function initChessCanvasState(ctx) {
+    let chessCanvasState = {
+        ctx,
+        tileSize: 50
+    }
+    chessCanvasState.startX = window.innerWidth / 2 - (chessCanvasState.tileSize * 8) / 2;
+    chessCanvasState.startY = window.innerHeight / 2 - (chessCanvasState.tileSize * 8) / 2;
+
+    return chessCanvasState;
+}
