@@ -31,6 +31,25 @@ export let chessState = {
     }
 }
 
+export function restartChessState(chessState) {
+    chessState.state = 'playerWTurn', // playerBTurn, playerWTurn, playerBPick, playerWPick, end
+    chessState.chessPieces = [
+        [{piece:'br'}, {piece:'bn'}, {piece:'bb'}, {piece:'bq'}, {piece:'bk'}, {piece:'bb'}, {piece:'bn'}, {piece:'br'}],
+        [{piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}],
+        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
+        [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
+    ],
+    chessState.pickedPiece = null, // structure: [row, col],
+    chessState.enPassant = {
+        location: null, // structure: { row, col }
+        signal: false, // true to tell if the player do en passant move
+    }
+}
+
 export function initChessCanvasState(ctx) {
     let chessCanvasState = {
         ctx,
@@ -38,6 +57,24 @@ export function initChessCanvasState(ctx) {
     }
     chessCanvasState.startX = window.innerWidth / 2 - (chessCanvasState.tileSize * 8) / 2;
     chessCanvasState.startY = window.innerHeight / 2 - (chessCanvasState.tileSize * 8) / 2;
+
+    chessCanvasState.menuButton = {
+        x: chessCanvasState.startX - 270,
+        y: chessCanvasState.startY + 100,
+        width: 200,
+        height: 40,
+        text: 'Menu',
+        textSize: 30
+    }
+
+    chessCanvasState.restartButton = {
+        x: chessCanvasState.startX - 270,
+        y: chessCanvasState.startY + 160,
+        width: 200,
+        height: 40,
+        text: 'Restart',
+        textSize: 30
+    }
 
     return chessCanvasState;
 }

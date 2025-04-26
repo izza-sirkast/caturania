@@ -1,5 +1,38 @@
-import { allWhitePieces, allBlackPieces } from './chessVars.js';
+import { allWhitePieces, allBlackPieces, restartChessState } from './chessVars.js';
 import { determinePossibleMoves } from './determinePossibleMoves.js';
+import { changeGameState } from '../script.js';
+
+export function playerMoveListener (event, canvasState, chessState) {
+    let clientX = event.clientX
+    let clientY = event.clientY
+    let x = clientX - canvasState.startX;
+    let y = clientY - canvasState.startY;
+
+    // If user clicks outside the chess board
+    if(x < 0 || x > canvasState.tileSize * 8 || y < 0 || y > canvasState.tileSize * 8) {
+        // If user click menu button
+        if(clientX >= canvasState.menuButton.x && clientX <= canvasState.menuButton.x + canvasState.menuButton.width && clientY >= canvasState.menuButton.y && clientY <= canvasState.menuButton.y + canvasState.menuButton.height) {
+            changeGameState('menu');
+        }
+
+        // If user click restart button
+        if(clientX >= canvasState.restartButton.x && clientX <= canvasState.restartButton.x + canvasState.restartButton.width && clientY >= canvasState.restartButton.y && clientY <= canvasState.restartButton.y + canvasState.restartButton.height) {
+            restartChessState(chessState);
+        }
+
+        return;
+    }
+
+    let row = Math.floor(y / canvasState.tileSize);
+    let col = Math.floor(x / canvasState.tileSize);
+    console.log(`${chessState.state} cliked on Row: ${row}, Col: ${col}`);
+    
+    if(chessState.state === 'playerWTurn' || chessState.state === 'playerBTurn') {
+        handlePlayerTurn(chessState, {row, col});
+    }else if(chessState.state === 'playerWPick' || chessState.state === 'playerBPick') {
+        handlePlayerPick(chessState, {row, col});
+    }
+}
 
 // Handle player mouse click when it's their turn (when player pick a piece but hasn't moved it yet)
 export function handlePlayerTurn(chessState, move) {
