@@ -1,4 +1,5 @@
-import { renderChess, playerMoveListener } from './chess/chessScript.js';
+import { renderChess } from './chess/chessScript.js';
+import { playerMoveListener } from './chess/handlePlayerEvent.js';
 import { chessState, initChessCanvasState } from './chess/chessVars.js';
 import { menuEventListener } from './menu/menuEventListener.js';
 import { renderMenu } from './menu/menuScript.js';
@@ -47,4 +48,4 @@ export function changeGameState(newState){
     }
 }
 
-changeGameState('menu');
+changeGameState('play');
