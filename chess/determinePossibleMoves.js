@@ -368,6 +368,34 @@ function kingPossibleMoves(isWhite, row, col, chessState){
     }
 }
 
-function checkPossibleMoveOnATile(chessState, row, col) {
+export function checkPossibleMovesOnATile(chessState, row, col) {
+    let possibleMoves = [];
     
+    // == Check for possible pawn moves ==
+    if(row >= 1){
+        // check for possible normal pawn moves
+        if(chessState.chessPieces[row - 1][col].piece === 'bp') {
+            possibleMoves.push({row: row - 1, col, move: 'move'});
+        }
+        if(row >= 2){
+            if(chessState.chessPieces[row - 2][col].piece === 'bp' &&  row === 3) {
+                possibleMoves.push({row: row - 2, col, move: 'move'});
+            }
+        }
+
+        // check for possible pawn eats
+        if(chessState.chessPieces[row - 1][col - 1].piece === 'bp') {
+            possibleMoves.push({row: row - 1, col: col - 1, move: 'eat'});
+        }
+        if(chessState.chessPieces[row - 1][col + 1].piece === 'bp') {
+            possibleMoves.push({row: row - 1, col: col + 1, move: 'eat'});
+        }
+
+        // check for possible pawn en passant move
+        // if(row )
+    }
+
+
+
+    return possibleMoves;
 }

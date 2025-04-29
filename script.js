@@ -29,7 +29,6 @@ export function changeGameState(newState){
     clearInterval(gameLoopInterval);
 
     if(newState === 'play'){
-
         canvas.addEventListener('click', handlePlayerMoveClick);
 
         gameLoopInterval = setInterval(() => {
