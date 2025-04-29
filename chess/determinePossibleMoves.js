@@ -343,6 +343,15 @@ function kingPossibleMoves(isWhite, row, col, chessState){
         [row + 1, col - 1], [row + 1, col], [row + 1, col + 1]
     ];
 
+    // Check if can right castle
+    const rightCastleWayClear = chessState.chessPieces[row][col + 1].piece === ' ' && chessState.chessPieces[row][col + 2] === ' ';
+    const rightKingAndRookHasntMoved = chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'wr' && chessState.chessPieces[row][col + 3].possibleCastle
+    if(rightCastleWayClear && rightKingAndRookHasntMoved) {
+        // Check if the king is not in check
+
+
+    }
+
     for(let i = 0; i < kingMoves.length; i++) {
         let move = kingMoves[i];
         let row = move[0];
@@ -357,4 +366,8 @@ function kingPossibleMoves(isWhite, row, col, chessState){
             }
         }
     }
+}
+
+function checkPossibleMoveOnATile(chessState, row, col) {
+    
 }
