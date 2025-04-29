@@ -35,8 +35,8 @@ export function renderChess(canvasState, chessState) {
     
     
     // Test
-    const tRow = 2;
-    const tCol = 2;
+    const tRow = 4;
+    const tCol = 0;;
     let posMoves = checkPossibleMovesOnATile(chessState, tRow, tCol);
 
     canvasState.ctx.fillStyle = 'rgba(36 40 200 / 40%)';

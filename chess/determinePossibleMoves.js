@@ -384,17 +384,60 @@ export function checkPossibleMovesOnATile(chessState, row, col) {
         }
 
         // check for possible pawn eats
-        if(chessState.chessPieces[row - 1][col - 1].piece === 'bp') {
-            possibleMoves.push({row: row - 1, col: col - 1, move: 'eat'});
+        if(col >= 1){
+            if(chessState.chessPieces[row - 1][col - 1].piece === 'bp') {
+                possibleMoves.push({row: row - 1, col: col - 1, move: 'eat'});
+            }
         }
-        if(chessState.chessPieces[row - 1][col + 1].piece === 'bp') {
-            possibleMoves.push({row: row - 1, col: col + 1, move: 'eat'});
+        if(col <= 6){
+            if(chessState.chessPieces[row - 1][col + 1].piece === 'bp') {
+                possibleMoves.push({row: row - 1, col: col + 1, move: 'eat'});
+            }
         }
-
-        // check for possible pawn en passant move
-        // if(row )
     }
 
+
+    // == Check for possible rook moves ==
+    if(col >= 1){
+        for(let i = col - 1; i >= 0; i--) {
+            if(chessState.chessPieces[row][i].piece === 'br'){
+                possibleMoves.push({row, col: i, move: 'both'});
+                break;
+            }else if(chessState.chessPieces[row][i].piece !== ' '){
+                break;
+            }
+        }
+    }
+    if(col <= 6){
+        for(let i = col + 1; i <= 7; i++) {
+            if(chessState.chessPieces[row][i].piece === 'br'){
+                possibleMoves.push({row, col: i, move: 'both'});
+                break;
+            }else if(chessState.chessPieces[row][i].piece !== ' '){
+                break;
+            }
+        }
+    }
+    if(row >= 1){
+        for(let i = row - 1; i >= 0; i--) {
+            if(chessState.chessPieces[i][col].piece === 'br'){
+                possibleMoves.push({row: i, col, move: 'both'});
+                break;
+            }else if(chessState.chessPieces[i][col].piece !== ' '){
+                break;
+            }
+        }
+    }
+    if(row <= 6){
+        for(let i = row + 1; i <= 7; i++) {
+            if(chessState.chessPieces[i][col].piece === 'br'){
+                possibleMoves.push({row: i, col, move: 'both'});
+                break;
+            }else if(chessState.chessPieces[i][col].piece !== ' '){
+                break;
+            }
+        }
+    }
 
 
     return possibleMoves;
