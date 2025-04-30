@@ -12,18 +12,8 @@ export let chessState = {
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
-        [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece:'wb'}, {piece:'wn'}, {piece:'wr',possibleCastle:true}]
+        [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece:' '}, {piece:' '}, {piece:'wr',possibleCastle:true}]
     ],
-    // chessPieces: [
-    //     [{piece:' '},  {piece:' '}, {piece:' '}, {piece:'bq'}, {piece:'bk'}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:'wq'}, {piece:'wk'}, {piece:' '}, {piece:' '}, {piece:' '}]
-    // ],
     pickedPiece: null, // structure: [row, col],
     enPassant: {
         location: null, // structure: { row, col }
