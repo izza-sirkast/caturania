@@ -5,14 +5,14 @@ export let allBlackPieces = ['bp', 'br', 'bn', 'bb', 'bq', 'bk'];
 export let chessState = {
     state: 'playerWTurn', // playerBTurn, playerWTurn, playerBPick, playerWPick, end
     chessPieces: [
-        [{piece:'br'}, {piece:'bn'}, {piece:'bb'}, {piece:'bq'}, {piece:'bk'}, {piece:'bb'}, {piece:'bn'}, {piece:'br'}],
+        [{piece:'br',possibleCastle:true}, {piece:'bn'}, {piece:'bb'}, {piece:'bq'}, {piece:'bk',possibleCastle:true}, {piece:'bb'}, {piece:'bn'}, {piece:'br',possibleCastle:true}],
         [{piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
-        [{piece:'wr'}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk'}, {piece:'wb'}, {piece:'wn'}, {piece:'wr'}]
+        [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece:'wb'}, {piece:'wn'}, {piece:'wr',possibleCastle:true}]
     ],
     // chessPieces: [
     //     [{piece:' '},  {piece:' '}, {piece:' '}, {piece:'bq'}, {piece:'bk'}, {piece:' '}, {piece:' '}, {piece:' '}],

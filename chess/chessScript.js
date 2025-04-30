@@ -1,3 +1,5 @@
+import { checkPossibleMovesOnATile } from "./determinePossibleMoves.js";
+
 export function renderChess(canvasState, chessState) {
     // Clear the canvas
     canvasState.ctx.clearRect(0, 0, canvasState.ctx.canvas.width, canvasState.ctx.canvas.height);
@@ -17,7 +19,7 @@ export function renderChess(canvasState, chessState) {
     canvasState.ctx.fillRect(canvasState.restartButton.x, canvasState.restartButton.y, canvasState.restartButton.width, canvasState.restartButton.height);
     canvasState.ctx.fillStyle = 'white';
     canvasState.ctx.font = `${canvasState.restartButton.textSize}px monospace`;
-    canvasState.ctx.fillText('restart', canvasState.restartButton.x + 43,  canvasState.restartButton.y + 29);
+    canvasState.ctx.fillText('restart', canvasState.restartButton.x + 43,  canvasState.restartButton.y + 29);    
 
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
@@ -29,6 +31,22 @@ export function renderChess(canvasState, chessState) {
 
         }
     }
+
+    
+    
+    // Test for possible moves on a target tile
+    const tRow = 4;
+    const tCol = 2;;
+    let posMoves = checkPossibleMovesOnATile(true, chessState, tRow, tCol);
+
+    canvasState.ctx.fillStyle = 'rgba(36 40 200 / 40%)';
+    canvasState.ctx.fillRect(canvasState.startX + tCol * canvasState.tileSize, canvasState.startY + tRow * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
+
+    posMoves.forEach((move) => {
+        canvasState.ctx.fillStyle = move.move === 'eat' ? 'rgba(200 100 182 / 60%)' : 'rgba(100 200 182 / 60%)';
+        canvasState.ctx.fillRect(canvasState.startX + move.col  * canvasState.tileSize, canvasState.startY + move.row * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
+    })
+
 }
 
 

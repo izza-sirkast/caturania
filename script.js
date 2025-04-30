@@ -5,7 +5,7 @@ import { menuEventListener } from './menu/menuEventListener.js';
 import { renderMenu } from './menu/menuScript.js';
 import { initMenuCanvasState } from './menu/menuVars.js';
 
-let canvas = document.getElementById('chezz');
+let canvas = document.getElementById('caturania');
 let ctx = canvas.getContext('2d');
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
@@ -29,7 +29,6 @@ export function changeGameState(newState){
     clearInterval(gameLoopInterval);
 
     if(newState === 'play'){
-
         canvas.addEventListener('click', handlePlayerMoveClick);
 
         gameLoopInterval = setInterval(() => {
