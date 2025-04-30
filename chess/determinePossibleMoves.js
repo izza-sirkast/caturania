@@ -368,30 +368,56 @@ function kingPossibleMoves(isWhite, row, col, chessState){
     }
 }
 
-export function checkPossibleMovesOnATile(chessState, row, col) {
+export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
     let possibleMoves = [];
     
     // == Check for possible pawn moves ==
-    if(row >= 1){
-        // check for possible normal pawn moves
-        if(chessState.chessPieces[row - 1][col].piece === 'bp') {
-            possibleMoves.push({row: row - 1, col, move: 'move'});
-        }
-        if(row >= 2){
-            if(chessState.chessPieces[row - 2][col].piece === 'bp' &&  row === 3) {
-                possibleMoves.push({row: row - 2, col, move: 'move'});
+    if(isWhite){
+        if(row <= 6){
+            // check for possible normal pawn moves
+            if(chessState.chessPieces[row + 1][col].piece === 'wp') {
+                possibleMoves.push({row: row + 1, col, move: 'move'});
+            }
+            if(row <= 5){
+                if(chessState.chessPieces[row + 2][col].piece === 'wp' &&  row === 4) {
+                    possibleMoves.push({row: row + 2, col, move: 'move'});
+                }
+            }
+    
+            // check for possible pawn eats
+            if(col >= 1){
+                if(chessState.chessPieces[row + 1][col - 1].piece === 'wp') {
+                    possibleMoves.push({row: row + 1, col: col - 1, move: 'eat'});
+                }
+            }
+            if(col <= 6){
+                if(chessState.chessPieces[row + 1][col + 1].piece === 'wp') {
+                    possibleMoves.push({row: row + 1, col: col + 1, move: 'eat'});
+                }
             }
         }
-
-        // check for possible pawn eats
-        if(col >= 1){
-            if(chessState.chessPieces[row - 1][col - 1].piece === 'bp') {
-                possibleMoves.push({row: row - 1, col: col - 1, move: 'eat'});
+    }else{
+        if(row >= 1){
+            // check for possible normal pawn moves
+            if(chessState.chessPieces[row - 1][col].piece === 'bp') {
+                possibleMoves.push({row: row - 1, col, move: 'move'});
             }
-        }
-        if(col <= 6){
-            if(chessState.chessPieces[row - 1][col + 1].piece === 'bp') {
-                possibleMoves.push({row: row - 1, col: col + 1, move: 'eat'});
+            if(row >= 2){
+                if(chessState.chessPieces[row - 2][col].piece === 'bp' &&  row === 3) {
+                    possibleMoves.push({row: row - 2, col, move: 'move'});
+                }
+            }
+    
+            // check for possible pawn eats
+            if(col >= 1){
+                if(chessState.chessPieces[row - 1][col - 1].piece === 'bp') {
+                    possibleMoves.push({row: row - 1, col: col - 1, move: 'eat'});
+                }
+            }
+            if(col <= 6){
+                if(chessState.chessPieces[row - 1][col + 1].piece === 'bp') {
+                    possibleMoves.push({row: row - 1, col: col + 1, move: 'eat'});
+                }
             }
         }
     }

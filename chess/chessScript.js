@@ -34,10 +34,10 @@ export function renderChess(canvasState, chessState) {
 
     
     
-    // Test
-    const tRow = 3;
+    // Test for possible moves on a target tile
+    const tRow = 4;
     const tCol = 2;;
-    let posMoves = checkPossibleMovesOnATile(chessState, tRow, tCol);
+    let posMoves = checkPossibleMovesOnATile(true, chessState, tRow, tCol);
 
     canvasState.ctx.fillStyle = 'rgba(36 40 200 / 40%)';
     canvasState.ctx.fillRect(canvasState.startX + tCol * canvasState.tileSize, canvasState.startY + tRow * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
