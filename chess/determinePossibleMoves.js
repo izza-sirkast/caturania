@@ -457,96 +457,109 @@ export function checkPossibleMovesOnATile(chessState, row, col) {
         rowBoard.forEach((tile, j) => {
             switch(tile.piece) {
                 case 'bb': // Check for possible bishop moves
-                    // If bishop not in the possible bishop move location
-                    if(!(Math.abs(i - row) === Math.abs(j - col))){
-                        break;
-                    }
-
-                    let isPieceInTheWay = false;
-                    // Check if there is a piece in the way
-                    if(i < row && j < col) { // if bishop is in the upper left diagonal
-                        for(let k = i + 1, l = j + 1; k < row && l < col; k++, l++) {
-                            if(chessState.chessPieces[k][l].piece !== ' '){
-                                isPieceInTheWay = true;
-                                break;
-                            }
-                        }
-                    }
-                    if(i < row && j > col) { // if bishop is in the upper right diagonal
-                        for(let k = i + 1, l = j - 1; k < row && l > col; k++, l--) {
-                            if(chessState.chessPieces[k][l].piece !== ' '){
-                                isPieceInTheWay = true;
-                                break;
-                            }
-                        }
-                    }if(i > row && j < col) { // if bishop is in the lower left diagonal
-                        for(let k = i - 1, l = j + 1; k > row && l < col; k--, l++) {
-                            if(chessState.chessPieces[k][l].piece !== ' '){
-                                isPieceInTheWay = true;
-                                break;
-                            }
-                        }
-                    }if(i > row && j > col) { // if bishop is in the lower right diagonal
-                        for(let k = i - 1, l = j - 1; k > row && l > col; k--, l--) {
-                            if(chessState.chessPieces[k][l].piece !== ' '){
-                                isPieceInTheWay = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if(!isPieceInTheWay){
-                        possibleMoves.push({row: i, col: j, move: 'both'});
+                    const possibleBishopMoves = checkPossibleBishopMoves(chessState, row, col, i, j);
+                    if(possibleBishopMoves !== null) {
+                        possibleMoves.push(possibleBishopMoves);
                     }
                     break;
+
+                case 'br': // Check for possible rook moves
+                    const possibleRookMoves = checkPossibleRookMoves(chessState, row, col, i, j);
+                    if(possibleRookMoves !== null) {
+                        possibleMoves.push(possibleRookMoves);
+                    }
+                    break;
+                
+                case 'bq': // Check for possible queen moves
+                    
+                    break;
+
                 default:
                     break;
             }
         })
     })
 
-    // == Check for possible rook moves ==
-    // if(col >= 1){
-    //     for(let i = col - 1; i >= 0; i--) {
-    //         if(chessState.chessPieces[row][i].piece === 'br'){
-    //             possibleMoves.push({row, col: i, move: 'both'});
-    //             break;
-    //         }else if(chessState.chessPieces[row][i].piece !== ' '){
-    //             break;
-    //         }
-    //     }
-    // }
-    // if(col <= 6){
-    //     for(let i = col + 1; i <= 7; i++) {
-    //         if(chessState.chessPieces[row][i].piece === 'br'){
-    //             possibleMoves.push({row, col: i, move: 'both'});
-    //             break;
-    //         }else if(chessState.chessPieces[row][i].piece !== ' '){
-    //             break;
-    //         }
-    //     }
-    // }
-    // if(row >= 1){
-    //     for(let i = row - 1; i >= 0; i--) {
-    //         if(chessState.chessPieces[i][col].piece === 'br'){
-    //             possibleMoves.push({row: i, col, move: 'both'});
-    //             break;
-    //         }else if(chessState.chessPieces[i][col].piece !== ' '){
-    //             break;
-    //         }
-    //     }
-    // }
-    // if(row <= 6){
-    //     for(let i = row + 1; i <= 7; i++) {
-    //         if(chessState.chessPieces[i][col].piece === 'br'){
-    //             possibleMoves.push({row: i, col, move: 'both'});
-    //             break;
-    //         }else if(chessState.chessPieces[i][col].piece !== ' '){
-    //             break;
-    //         }
-    //     }
-    // }
-
-
     return possibleMoves;
+}
+
+// Check for possible bishop moves to a target tile
+function checkPossibleBishopMoves(chessState, targetRow, targetCol, bishopRow, bishopCol) {
+    // If bishop not in the possible bishop move location
+    if(!(Math.abs(bishopRow - targetRow) === Math.abs(bishopCol - targetCol))){
+        return null;
+    }
+
+    // Check if there is a piece in the way
+    if(bishopRow < targetRow && bishopCol < targetCol) { // if bishop is in the upper left diagonal
+        for(let k = bishopRow + 1, l = bishopCol + 1; k < targetRow && l < targetCol; k++, l++) {
+            if(chessState.chessPieces[k][l].piece !== ' '){
+                return null;
+            }
+        }
+    }
+    if(bishopRow < targetRow && bishopCol > targetCol) { // if bishop is in the upper right diagonal
+        for(let k = bishopRow + 1, l = bishopCol - 1; k < targetRow && l > targetCol; k++, l--) {
+            if(chessState.chessPieces[k][l].piece !== ' '){
+                return null;
+            }
+        }
+    }if(bishopRow > targetRow && bishopCol < targetCol) { // if bishop is in the lower left diagonal
+        for(let k = bishopRow - 1, l = bishopCol + 1; k > targetRow && l < targetCol; k--, l++) {
+            if(chessState.chessPieces[k][l].piece !== ' '){
+                return null;
+            }
+        }
+    }if(bishopRow > targetRow && bishopCol > targetCol) { // if bishop is in the lower right diagonal
+        for(let k = bishopRow - 1, l = bishopCol - 1; k > targetRow && l > targetCol; k--, l--) {
+            if(chessState.chessPieces[k][l].piece !== ' '){
+                return null;
+            }
+        }
+    }
+
+    return {row: bishopRow, col: bishopCol, move: 'both'};
+}
+
+// Check for possible rook moves to a target tile
+function checkPossibleRookMoves(chessState, targetRow, targetCol, rookRow, rookCol){
+    // If rook not in the possible rook move location
+    if(!(rookRow === targetRow || rookCol === targetCol)){
+        return null;
+    }
+
+    if(targetRow > rookRow && targetCol === rookCol) { // if rook is in the upper row
+        // Check if there is a piece in the way
+        for(let i = rookRow + 1; i < targetRow; i++) {
+            if(chessState.chessPieces[i][rookCol].piece !== ' '){
+                return null;
+            }
+        }
+    }
+    if(targetRow < rookRow && targetCol === rookCol) { // if rook is in the lower row
+        // Check if there is a piece in the way
+        for(let i = rookRow - 1; i > targetRow; i--) {
+            if(chessState.chessPieces[i][rookCol].piece !== ' '){
+                return null;
+            }
+        }
+    }
+    if(targetRow === rookRow && targetCol > rookCol) { // if rook is in the right column
+        // Check if there is a piece in the way
+        for(let i = rookCol + 1; i < targetCol; i++) {
+            if(chessState.chessPieces[rookRow][i].piece !== ' '){
+                return null;
+            }
+        }
+    }
+    if(targetRow === rookRow && targetCol < rookCol) { // if rook is in the left column
+        // Check if there is a piece in the way
+        for(let i = rookCol - 1; i > targetCol; i--) {
+            if(chessState.chessPieces[rookRow][i].piece !== ' '){
+                return null;
+            }
+        }
+    }
+
+    return {row: rookRow, col: rookCol, move: 'both'};
 }
