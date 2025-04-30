@@ -482,6 +482,13 @@ export function checkPossibleMovesOnATile(chessState, row, col) {
                     }
                     break;
 
+                case 'bk': // Check for possible king moves
+                    const possibleKingMoves = checkPossibleKingMoves(chessState, row, col, i, j);
+                    if(possibleKingMoves !== null) {
+                        possibleMoves.push(possibleKingMoves);
+                    }
+                    break;
+            
                 default:
                     break;
             }
@@ -570,4 +577,14 @@ function checkPossibleRookMoves(chessState, targetRow, targetCol, rookRow, rookC
     }
 
     return {row: rookRow, col: rookCol, move: 'both'};
+}
+
+// Check for possible king moves to a target tile
+function checkPossibleKingMoves(chessState, targetRow, targetCol, kingRow, kingCol) {
+    // If king not in the possible king move location
+    if(Math.abs(kingRow - targetRow) > 1 || Math.abs(kingCol - targetCol) > 1){
+        return null;
+    }
+
+    return {row: kingRow, col: kingCol, move: 'both'};
 }
