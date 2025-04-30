@@ -397,6 +397,61 @@ export function checkPossibleMovesOnATile(chessState, row, col) {
     }
 
 
+    // == Check for possible knight moves ==
+    if(row >= 2){
+        if(col >= 1){
+            if(chessState.chessPieces[row - 2][col - 1].piece === 'bn'){
+                possibleMoves.push({row: row - 2, col: col - 1, move: 'both'});
+            }
+        }
+        
+        if(col <= 6){
+            if(chessState.chessPieces[row - 2][col + 1].piece === 'bn'){
+                possibleMoves.push({row: row - 2, col: col + 1, move: 'both'});
+            }
+        }
+    }
+    if(row >= 1){
+        if(col >= 2){
+            if(chessState.chessPieces[row - 1][col - 2].piece === 'bn'){
+                possibleMoves.push({row: row - 1, col: col - 2, move: 'both'});
+            }
+        }
+        
+        if(col <= 5){
+            if(chessState.chessPieces[row - 1][col + 2].piece === 'bn'){
+                possibleMoves.push({row: row - 1, col: col + 2, move: 'both'});
+            }
+        }
+    }
+    if(row <= 6){
+        if(col >= 1){
+            if(chessState.chessPieces[row + 2][col - 1].piece === 'bn'){
+                possibleMoves.push({row: row + 2, col: col - 1, move: 'both'});
+            }
+        }
+        
+        if(col <= 6){
+            if(chessState.chessPieces[row + 2][col + 1].piece === 'bn'){
+                possibleMoves.push({row: row + 2, col: col + 1, move: 'both'});
+            }
+        }
+    }
+    if(row <= 7){
+        if(col >= 2){
+            if(chessState.chessPieces[row + 1][col - 2].piece === 'bn'){
+                possibleMoves.push({row: row + 1, col: col - 2, move: 'both'});
+            }
+        }
+        
+        if(col <= 5){
+            if(chessState.chessPieces[row + 1][col + 2].piece === 'bn'){
+                possibleMoves.push({row: row + 1, col: col + 2, move: 'both'});
+            }
+        }
+    }
+
+
     // == Check for possible rook moves ==
     if(col >= 1){
         for(let i = col - 1; i >= 0; i--) {
