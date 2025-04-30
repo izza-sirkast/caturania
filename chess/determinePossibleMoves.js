@@ -452,47 +452,100 @@ export function checkPossibleMovesOnATile(chessState, row, col) {
     }
 
 
+    // == Check for possible other pieces moves ==
+    chessState.chessPieces.forEach((rowBoard, i) => {
+        rowBoard.forEach((tile, j) => {
+            switch(tile.piece) {
+                case 'bb': // Check for possible bishop moves
+                    // If bishop not in the possible bishop move location
+                    if(!(Math.abs(i - row) === Math.abs(j - col))){
+                        break;
+                    }
+
+                    let isPieceInTheWay = false;
+                    // Check if there is a piece in the way
+                    if(i < row && j < col) { // if bishop is in the upper left diagonal
+                        for(let k = i + 1, l = j + 1; k < row && l < col; k++, l++) {
+                            if(chessState.chessPieces[k][l].piece !== ' '){
+                                isPieceInTheWay = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(i < row && j > col) { // if bishop is in the upper right diagonal
+                        for(let k = i + 1, l = j - 1; k < row && l > col; k++, l--) {
+                            if(chessState.chessPieces[k][l].piece !== ' '){
+                                isPieceInTheWay = true;
+                                break;
+                            }
+                        }
+                    }if(i > row && j < col) { // if bishop is in the lower left diagonal
+                        for(let k = i - 1, l = j + 1; k > row && l < col; k--, l++) {
+                            if(chessState.chessPieces[k][l].piece !== ' '){
+                                isPieceInTheWay = true;
+                                break;
+                            }
+                        }
+                    }if(i > row && j > col) { // if bishop is in the lower right diagonal
+                        for(let k = i - 1, l = j - 1; k > row && l > col; k--, l--) {
+                            if(chessState.chessPieces[k][l].piece !== ' '){
+                                isPieceInTheWay = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(!isPieceInTheWay){
+                        possibleMoves.push({row: i, col: j, move: 'both'});
+                    }
+                    break;
+                default:
+                    break;
+            }
+        })
+    })
+
     // == Check for possible rook moves ==
-    if(col >= 1){
-        for(let i = col - 1; i >= 0; i--) {
-            if(chessState.chessPieces[row][i].piece === 'br'){
-                possibleMoves.push({row, col: i, move: 'both'});
-                break;
-            }else if(chessState.chessPieces[row][i].piece !== ' '){
-                break;
-            }
-        }
-    }
-    if(col <= 6){
-        for(let i = col + 1; i <= 7; i++) {
-            if(chessState.chessPieces[row][i].piece === 'br'){
-                possibleMoves.push({row, col: i, move: 'both'});
-                break;
-            }else if(chessState.chessPieces[row][i].piece !== ' '){
-                break;
-            }
-        }
-    }
-    if(row >= 1){
-        for(let i = row - 1; i >= 0; i--) {
-            if(chessState.chessPieces[i][col].piece === 'br'){
-                possibleMoves.push({row: i, col, move: 'both'});
-                break;
-            }else if(chessState.chessPieces[i][col].piece !== ' '){
-                break;
-            }
-        }
-    }
-    if(row <= 6){
-        for(let i = row + 1; i <= 7; i++) {
-            if(chessState.chessPieces[i][col].piece === 'br'){
-                possibleMoves.push({row: i, col, move: 'both'});
-                break;
-            }else if(chessState.chessPieces[i][col].piece !== ' '){
-                break;
-            }
-        }
-    }
+    // if(col >= 1){
+    //     for(let i = col - 1; i >= 0; i--) {
+    //         if(chessState.chessPieces[row][i].piece === 'br'){
+    //             possibleMoves.push({row, col: i, move: 'both'});
+    //             break;
+    //         }else if(chessState.chessPieces[row][i].piece !== ' '){
+    //             break;
+    //         }
+    //     }
+    // }
+    // if(col <= 6){
+    //     for(let i = col + 1; i <= 7; i++) {
+    //         if(chessState.chessPieces[row][i].piece === 'br'){
+    //             possibleMoves.push({row, col: i, move: 'both'});
+    //             break;
+    //         }else if(chessState.chessPieces[row][i].piece !== ' '){
+    //             break;
+    //         }
+    //     }
+    // }
+    // if(row >= 1){
+    //     for(let i = row - 1; i >= 0; i--) {
+    //         if(chessState.chessPieces[i][col].piece === 'br'){
+    //             possibleMoves.push({row: i, col, move: 'both'});
+    //             break;
+    //         }else if(chessState.chessPieces[i][col].piece !== ' '){
+    //             break;
+    //         }
+    //     }
+    // }
+    // if(row <= 6){
+    //     for(let i = row + 1; i <= 7; i++) {
+    //         if(chessState.chessPieces[i][col].piece === 'br'){
+    //             possibleMoves.push({row: i, col, move: 'both'});
+    //             break;
+    //         }else if(chessState.chessPieces[i][col].piece !== ' '){
+    //             break;
+    //         }
+    //     }
+    // }
 
 
     return possibleMoves;
