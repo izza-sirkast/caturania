@@ -347,9 +347,14 @@ function kingPossibleMoves(isWhite, row, col, chessState){
     const rightCastleWayClear = chessState.chessPieces[row][col + 1].piece === ' ' && chessState.chessPieces[row][col + 2] === ' ';
     const rightKingAndRookHasntMoved = chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'wr' && chessState.chessPieces[row][col + 3].possibleCastle
     if(rightCastleWayClear && rightKingAndRookHasntMoved) {
-        // Check if the king is not in check
-
-
+        // Check if the king is not in check in the way
+        const firstRightTilePossibleMoves = checkPossibleMovesOnATile(isWhite, chessState, row, col + 1);
+        if(firstRightTilePossibleMoves.length === 0){
+            const secondRightTilePossibleMoves = checkPossibleMovesOnATile(isWhite, chessState, row, col + 2);
+            if(secondRightTilePossibleMoves.length === 0){
+                chessState.chessPieces[row][col + 2].boardState = 'move';
+            }
+        }
     }
 
     for(let i = 0; i < kingMoves.length; i++) {
@@ -538,21 +543,21 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
     chessState.chessPieces.forEach((rowBoard, i) => {
         rowBoard.forEach((tile, j) => {
             switch(tile.piece) {
-                case 'bb': // Check for possible bishop moves
+                case isWhite ? 'wb' : 'bb' : // Check for possible bishop moves
                     const possibleBishopMoves = checkPossibleBishopMoves(chessState, row, col, i, j);
                     if(possibleBishopMoves !== null) {
                         possibleMoves.push(possibleBishopMoves);
                     }
                     break;
 
-                case 'br': // Check for possible rook moves
+                case isWhite ? 'wr' : 'br' : // Check for possible rook moves
                     const possibleRookMoves = checkPossibleRookMoves(chessState, row, col, i, j);
                     if(possibleRookMoves !== null) {
                         possibleMoves.push(possibleRookMoves);
                     }
                     break;
                 
-                case 'bq': // Check for possible queen moves
+                case isWhite ? 'wq' : 'bq': // Check for possible queen moves
                     const possibleDiagonalMoves = checkPossibleBishopMoves(chessState, row, col, i, j);
                     if(possibleDiagonalMoves !== null) {
                         possibleMoves.push(possibleDiagonalMoves);
@@ -564,7 +569,7 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
                     }
                     break;
 
-                case 'bk': // Check for possible king moves
+                case isWhite ? 'wk' : 'bk': // Check for possible king moves
                     const possibleKingMoves = checkPossibleKingMoves(chessState, row, col, i, j);
                     if(possibleKingMoves !== null) {
                         possibleMoves.push(possibleKingMoves);
