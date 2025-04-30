@@ -471,7 +471,15 @@ export function checkPossibleMovesOnATile(chessState, row, col) {
                     break;
                 
                 case 'bq': // Check for possible queen moves
-                    
+                    const possibleDiagonalMoves = checkPossibleBishopMoves(chessState, row, col, i, j);
+                    if(possibleDiagonalMoves !== null) {
+                        possibleMoves.push(possibleDiagonalMoves);
+                    }else{
+                        const possibleStraightMoves = checkPossibleRookMoves(chessState, row, col, i, j);
+                        if(possibleStraightMoves !== null) {
+                            possibleMoves.push(possibleStraightMoves);
+                        }
+                    }
                     break;
 
                 default:
