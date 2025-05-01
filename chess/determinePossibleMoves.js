@@ -344,18 +344,55 @@ function kingPossibleMoves(isWhite, row, col, chessState){
     ];
 
     // Check if can right castle
-    const rightCastleWayClear = chessState.chessPieces[row][col + 1].piece === ' ' && chessState.chessPieces[row][col + 2] === ' ';
-    const rightKingAndRookHasntMoved = chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'wr' && chessState.chessPieces[row][col + 3].possibleCastle
+    const rightCastleWayClear = chessState.chessPieces[row][col + 1].piece === ' ' && chessState.chessPieces[row][col + 2].piece === ' ';
+    const rightKingAndRookHasntMoved = isWhite 
+        ? 
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'wr' && chessState.chessPieces[row][col + 3].possibleCastle 
+        :
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'br' && chessState.chessPieces[row][col + 3].possibleCastle 
+
     if(rightCastleWayClear && rightKingAndRookHasntMoved) {
-        // Check if the king is not in check in the way
-        const firstRightTilePossibleMoves = checkPossibleMovesOnATile(isWhite, chessState, row, col + 1);
-        if(firstRightTilePossibleMoves.length === 0){
-            const secondRightTilePossibleMoves = checkPossibleMovesOnATile(isWhite, chessState, row, col + 2);
-            if(secondRightTilePossibleMoves.length === 0){
-                chessState.chessPieces[row][col + 2].boardState = 'move';
+        // Check if the king is not in check
+        const kingIsChecked = checkPossibleMovesOnATile(!isWhite, chessState, row, col);
+        if(kingIsChecked.length === 0){
+            // Check if the king is not in check in the way
+            const firstRightTilePossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col + 1);
+            if(firstRightTilePossibleMoves.length === 0){
+                const secondRightTilePossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col + 2);
+                if(secondRightTilePossibleMoves.length === 0){
+                    chessState.chessPieces[row][col + 2].boardState = 'move';
+                }
+            }
+        }
+
+    }
+
+    // Check if can right castle
+    const leftCastlePossible = chessState.chessPieces[row][col - 1].piece === ' ' && chessState.chessPieces[row][col - 2].piece === ' ' && chessState.chessPieces[row][col - 3].piece === ' ';
+    const leftKingAndRookHasntMoved = isWhite 
+        ? 
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col - 4].piece === 'wr' && chessState.chessPieces[row][col - 4].possibleCastle
+        :
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col - 4].piece === 'br' && chessState.chessPieces[row][col - 4].possibleCastle
+
+    if(leftCastlePossible && leftKingAndRookHasntMoved) {
+        // Check if the king is not in check
+        const kingIsChecked = checkPossibleMovesOnATile(!isWhite, chessState, row, col);
+        if(kingIsChecked.length === 0){
+            // Check if the king is not in check in the way
+            const firstLeftPossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col - 1);
+            if(firstLeftPossibleMoves.length === 0){
+                const secondLeftPossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col - 2);
+                if(secondLeftPossibleMoves.length === 0){
+                    const thirdLeftTilePossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col - 3);
+                    if(thirdLeftTilePossibleMoves.length === 0){
+                        chessState.chessPieces[row][col - 2].boardState = 'move';
+                    }
+                }
             }
         }
     }
+
 
     for(let i = 0; i < kingMoves.length; i++) {
         let move = kingMoves[i];
@@ -381,23 +418,23 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
         if(row <= 6){
             // check for possible normal pawn moves
             if(chessState.chessPieces[row + 1][col].piece === 'wp') {
-                possibleMoves.push({row: row + 1, col, move: 'move'});
+                possibleMoves.push({row: row + 1, col, move: 'move', piece: 'wp'});
             }
             if(row <= 5){
                 if(chessState.chessPieces[row + 2][col].piece === 'wp' &&  row === 4) {
-                    possibleMoves.push({row: row + 2, col, move: 'move'});
+                    possibleMoves.push({row: row + 2, col, move: 'move', piece: 'wp'});
                 }
             }
     
             // check for possible pawn eats
             if(col >= 1){
                 if(chessState.chessPieces[row + 1][col - 1].piece === 'wp') {
-                    possibleMoves.push({row: row + 1, col: col - 1, move: 'eat'});
+                    possibleMoves.push({row: row + 1, col: col - 1, move: 'eat', piece: 'wp'});
                 }
             }
             if(col <= 6){
                 if(chessState.chessPieces[row + 1][col + 1].piece === 'wp') {
-                    possibleMoves.push({row: row + 1, col: col + 1, move: 'eat'});
+                    possibleMoves.push({row: row + 1, col: col + 1, move: 'eat', piece: 'wp'});
                 }
             }
         }
@@ -405,23 +442,23 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
         if(row >= 1){
             // check for possible normal pawn moves
             if(chessState.chessPieces[row - 1][col].piece === 'bp') {
-                possibleMoves.push({row: row - 1, col, move: 'move'});
+                possibleMoves.push({row: row - 1, col, move: 'move', piece: 'bp'});
             }
             if(row >= 2){
                 if(chessState.chessPieces[row - 2][col].piece === 'bp' &&  row === 3) {
-                    possibleMoves.push({row: row - 2, col, move: 'move'});
+                    possibleMoves.push({row: row - 2, col, move: 'move', piece: 'bp'});
                 }
             }
     
             // check for possible pawn eats
             if(col >= 1){
                 if(chessState.chessPieces[row - 1][col - 1].piece === 'bp') {
-                    possibleMoves.push({row: row - 1, col: col - 1, move: 'eat'});
+                    possibleMoves.push({row: row - 1, col: col - 1, move: 'eat', piece: 'bp'});
                 }
             }
             if(col <= 6){
                 if(chessState.chessPieces[row - 1][col + 1].piece === 'bp') {
-                    possibleMoves.push({row: row - 1, col: col + 1, move: 'eat'});
+                    possibleMoves.push({row: row - 1, col: col + 1, move: 'eat', piece: 'bp'});
                 }
             }
         }
@@ -433,52 +470,52 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
         if(row >= 2){
             if(col >= 1){
                 if(chessState.chessPieces[row - 2][col - 1].piece === 'wn'){
-                    possibleMoves.push({row: row - 2, col: col - 1, move: 'both'});
+                    possibleMoves.push({row: row - 2, col: col - 1, move: 'both', piece: 'wn'});
                 }
             }
             
             if(col <= 6){
                 if(chessState.chessPieces[row - 2][col + 1].piece === 'wn'){
-                    possibleMoves.push({row: row - 2, col: col + 1, move: 'both'});
+                    possibleMoves.push({row: row - 2, col: col + 1, move: 'both', piece: 'wn'});
                 }
             }
         }
         if(row >= 1){
             if(col >= 2){
                 if(chessState.chessPieces[row - 1][col - 2].piece === 'wn'){
-                    possibleMoves.push({row: row - 1, col: col - 2, move: 'both'});
+                    possibleMoves.push({row: row - 1, col: col - 2, move: 'both', piece: 'wn'});
                 }
             }
             
             if(col <= 5){
                 if(chessState.chessPieces[row - 1][col + 2].piece === 'wn'){
-                    possibleMoves.push({row: row - 1, col: col + 2, move: 'both'});
+                    possibleMoves.push({row: row - 1, col: col + 2, move: 'both', piece: 'wn'});
                 }
             }
         }
-        if(row <= 6){
+        if(row <= 5){
             if(col >= 1){
                 if(chessState.chessPieces[row + 2][col - 1].piece === 'wn'){
-                    possibleMoves.push({row: row + 2, col: col - 1, move: 'both'});
+                    possibleMoves.push({row: row + 2, col: col - 1, move: 'both', piece: 'wn'});
                 }
             }
             
             if(col <= 6){
                 if(chessState.chessPieces[row + 2][col + 1].piece === 'wn'){
-                    possibleMoves.push({row: row + 2, col: col + 1, move: 'both'});
+                    possibleMoves.push({row: row + 2, col: col + 1, move: 'both', piece: 'wn'});
                 }
             }
         }
-        if(row <= 7){
+        if(row <= 6){
             if(col >= 2){
                 if(chessState.chessPieces[row + 1][col - 2].piece === 'wn'){
-                    possibleMoves.push({row: row + 1, col: col - 2, move: 'both'});
+                    possibleMoves.push({row: row + 1, col: col - 2, move: 'both', piece: 'wn'});
                 }
             }
             
             if(col <= 5){
                 if(chessState.chessPieces[row + 1][col + 2].piece === 'wn'){
-                    possibleMoves.push({row: row + 1, col: col + 2, move: 'both'});
+                    possibleMoves.push({row: row + 1, col: col + 2, move: 'both', piece: 'wn'});
                 }
             }
         }
@@ -486,52 +523,52 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
         if(row >= 2){
             if(col >= 1){
                 if(chessState.chessPieces[row - 2][col - 1].piece === 'bn'){
-                    possibleMoves.push({row: row - 2, col: col - 1, move: 'both'});
+                    possibleMoves.push({row: row - 2, col: col - 1, move: 'both', piece: 'bn'});
                 }
             }
             
             if(col <= 6){
                 if(chessState.chessPieces[row - 2][col + 1].piece === 'bn'){
-                    possibleMoves.push({row: row - 2, col: col + 1, move: 'both'});
+                    possibleMoves.push({row: row - 2, col: col + 1, move: 'both', piece: 'bn'});
                 }
             }
         }
         if(row >= 1){
             if(col >= 2){
                 if(chessState.chessPieces[row - 1][col - 2].piece === 'bn'){
-                    possibleMoves.push({row: row - 1, col: col - 2, move: 'both'});
+                    possibleMoves.push({row: row - 1, col: col - 2, move: 'both', piece: 'bn'});
                 }
             }
             
             if(col <= 5){
                 if(chessState.chessPieces[row - 1][col + 2].piece === 'bn'){
-                    possibleMoves.push({row: row - 1, col: col + 2, move: 'both'});
+                    possibleMoves.push({row: row - 1, col: col + 2, move: 'both', piece: 'bn'});
                 }
             }
         }
-        if(row <= 6){
+        if(row <= 5){
             if(col >= 1){
                 if(chessState.chessPieces[row + 2][col - 1].piece === 'bn'){
-                    possibleMoves.push({row: row + 2, col: col - 1, move: 'both'});
+                    possibleMoves.push({row: row + 2, col: col - 1, move: 'both', piece: 'bn'});
                 }
             }
             
             if(col <= 6){
                 if(chessState.chessPieces[row + 2][col + 1].piece === 'bn'){
-                    possibleMoves.push({row: row + 2, col: col + 1, move: 'both'});
+                    possibleMoves.push({row: row + 2, col: col + 1, move: 'both', piece: 'bn'});
                 }
             }
         }
-        if(row <= 7){
+        if(row <= 6){
             if(col >= 2){
                 if(chessState.chessPieces[row + 1][col - 2].piece === 'bn'){
-                    possibleMoves.push({row: row + 1, col: col - 2, move: 'both'});
+                    possibleMoves.push({row: row + 1, col: col - 2, move: 'both', piece: 'bn'});
                 }
             }
             
             if(col <= 5){
                 if(chessState.chessPieces[row + 1][col + 2].piece === 'bn'){
-                    possibleMoves.push({row: row + 1, col: col + 2, move: 'both'});
+                    possibleMoves.push({row: row + 1, col: col + 2, move: 'both', piece: 'bn'});
                 }
             }
         }
@@ -544,33 +581,35 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
         rowBoard.forEach((tile, j) => {
             switch(tile.piece) {
                 case isWhite ? 'wb' : 'bb' : // Check for possible bishop moves
-                    const possibleBishopMoves = checkPossibleBishopMoves(chessState, row, col, i, j);
+                    const possibleBishopMoves = checkPossibleBishopMoves(chessState, isWhite, row, col, i, j);
                     if(possibleBishopMoves !== null) {
                         possibleMoves.push(possibleBishopMoves);
                     }
                     break;
 
                 case isWhite ? 'wr' : 'br' : // Check for possible rook moves
-                    const possibleRookMoves = checkPossibleRookMoves(chessState, row, col, i, j);
+                    const possibleRookMoves = checkPossibleRookMoves(chessState, isWhite, row, col, i, j);
                     if(possibleRookMoves !== null) {
                         possibleMoves.push(possibleRookMoves);
                     }
                     break;
                 
                 case isWhite ? 'wq' : 'bq': // Check for possible queen moves
-                    const possibleDiagonalMoves = checkPossibleBishopMoves(chessState, row, col, i, j);
+                    const possibleDiagonalMoves = checkPossibleBishopMoves(chessState, isWhite, row, col, i, j);
                     if(possibleDiagonalMoves !== null) {
+                        possibleDiagonalMoves.piece = isWhite ? 'wq' : 'bq';
                         possibleMoves.push(possibleDiagonalMoves);
                     }else{
-                        const possibleStraightMoves = checkPossibleRookMoves(chessState, row, col, i, j);
+                        const possibleStraightMoves = checkPossibleRookMoves(chessState, isWhite, row, col, i, j);
                         if(possibleStraightMoves !== null) {
+                            possibleStraightMoves.piece = isWhite ? 'wq' : 'bq';
                             possibleMoves.push(possibleStraightMoves);
                         }
                     }
                     break;
 
                 case isWhite ? 'wk' : 'bk': // Check for possible king moves
-                    const possibleKingMoves = checkPossibleKingMoves(chessState, row, col, i, j);
+                    const possibleKingMoves = checkPossibleKingMoves(chessState, isWhite, row, col, i, j);
                     if(possibleKingMoves !== null) {
                         possibleMoves.push(possibleKingMoves);
                     }
@@ -586,7 +625,7 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
 }
 
 // Check for possible bishop moves to a target tile
-function checkPossibleBishopMoves(chessState, targetRow, targetCol, bishopRow, bishopCol) {
+function checkPossibleBishopMoves(chessState, isWhite, targetRow, targetCol, bishopRow, bishopCol) {
     // If bishop not in the possible bishop move location
     if(!(Math.abs(bishopRow - targetRow) === Math.abs(bishopCol - targetCol))){
         return null;
@@ -620,11 +659,11 @@ function checkPossibleBishopMoves(chessState, targetRow, targetCol, bishopRow, b
         }
     }
 
-    return {row: bishopRow, col: bishopCol, move: 'both'};
+    return {row: bishopRow, col: bishopCol, move: 'both', piece: isWhite ? 'wb' : 'bb'};e
 }
 
 // Check for possible rook moves to a target tile
-function checkPossibleRookMoves(chessState, targetRow, targetCol, rookRow, rookCol){
+function checkPossibleRookMoves(chessState, isWhite, targetRow, targetCol, rookRow, rookCol){
     // If rook not in the possible rook move location
     if(!(rookRow === targetRow || rookCol === targetCol)){
         return null;
@@ -663,15 +702,15 @@ function checkPossibleRookMoves(chessState, targetRow, targetCol, rookRow, rookC
         }
     }
 
-    return {row: rookRow, col: rookCol, move: 'both'};
+    return {row: rookRow, col: rookCol, move: 'both', piece: isWhite ? 'wr' : 'br'};
 }
 
 // Check for possible king moves to a target tile
-function checkPossibleKingMoves(chessState, targetRow, targetCol, kingRow, kingCol) {
+function checkPossibleKingMoves(chessState, isWhite, targetRow, targetCol, kingRow, kingCol) {
     // If king not in the possible king move location
     if(Math.abs(kingRow - targetRow) > 1 || Math.abs(kingCol - targetCol) > 1){
         return null;
     }
 
-    return {row: kingRow, col: kingCol, move: 'both'};
+    return {row: kingRow, col: kingCol, move: 'both', piece: isWhite ? 'wk' : 'bk'};
 }

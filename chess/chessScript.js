@@ -35,17 +35,17 @@ export function renderChess(canvasState, chessState) {
     
     
     // Test for possible moves on a target tile
-    const tRow = 4;
-    const tCol = 2;;
-    let posMoves = checkPossibleMovesOnATile(true, chessState, tRow, tCol);
+    // const tRow = 4;
+    // const tCol = 2;;
+    // let posMoves = checkPossibleMovesOnATile(true, chessState, tRow, tCol);
 
-    canvasState.ctx.fillStyle = 'rgba(36 40 200 / 40%)';
-    canvasState.ctx.fillRect(canvasState.startX + tCol * canvasState.tileSize, canvasState.startY + tRow * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
+    // canvasState.ctx.fillStyle = 'rgba(36 40 200 / 40%)';
+    // canvasState.ctx.fillRect(canvasState.startX + tCol * canvasState.tileSize, canvasState.startY + tRow * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
 
-    posMoves.forEach((move) => {
-        canvasState.ctx.fillStyle = move.move === 'eat' ? 'rgba(200 100 182 / 60%)' : 'rgba(100 200 182 / 60%)';
-        canvasState.ctx.fillRect(canvasState.startX + move.col  * canvasState.tileSize, canvasState.startY + move.row * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
-    })
+    // posMoves.forEach((move) => {
+    //     canvasState.ctx.fillStyle = move.move === 'eat' ? 'rgba(200 100 182 / 60%)' : 'rgba(100 200 182 / 60%)';
+    //     canvasState.ctx.fillRect(canvasState.startX + move.col  * canvasState.tileSize, canvasState.startY + move.row * canvasState.tileSize, canvasState.tileSize, canvasState.tileSize); 
+    // })
 
 }
 
