@@ -12,8 +12,18 @@ export let chessState = {
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
-        [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece:' '}, {piece:' '}, {piece:'wr',possibleCastle:true}]
+        [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece: 'wb'}, {piece:'wn'}, {piece:'wr',possibleCastle:true}]
     ],
+    // chessPieces: [
+    //     [{piece:'br',possibleCastle:true},{piece:' '}, {piece:' '}, {piece:' '}, {piece:'bk',possibleCastle:true}, {piece:' '}, {piece:' '}, {piece:'br',possibleCastle:true}],
+    //     [{piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+    //     [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
+    //     [{piece:'wr', possibleCastle:true}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:'wk', possibleCastle:true}, {piece:' '}, {piece:' '}, {piece:'wr',possibleCastle:true}]
+    // ],
     pickedPiece: null, // structure: [row, col],
     enPassant: {
         location: null, // structure: { row, col }

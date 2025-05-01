@@ -345,20 +345,54 @@ function kingPossibleMoves(isWhite, row, col, chessState){
 
     // Check if can right castle
     const rightCastleWayClear = chessState.chessPieces[row][col + 1].piece === ' ' && chessState.chessPieces[row][col + 2].piece === ' ';
-    const rightKingAndRookHasntMoved = chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'wr' && chessState.chessPieces[row][col + 3].possibleCastle
+    const rightKingAndRookHasntMoved = isWhite 
+        ? 
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'wr' && chessState.chessPieces[row][col + 3].possibleCastle 
+        :
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col + 3].piece === 'br' && chessState.chessPieces[row][col + 3].possibleCastle 
 
     if(rightCastleWayClear && rightKingAndRookHasntMoved) {
-        // Check if the king is not in check in the way
-        const firstRightTilePossibleMoves = checkPossibleMovesOnATile(isWhite, chessState, row, col + 1);
-        console.log(firstRightTilePossibleMoves)
+        // Check if the king is not in check
+        const kingIsChecked = checkPossibleMovesOnATile(!isWhite, chessState, row, col);
+        if(kingIsChecked.length === 0){
+            // Check if the king is not in check in the way
+            const firstRightTilePossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col + 1);
+            if(firstRightTilePossibleMoves.length === 0){
+                const secondRightTilePossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col + 2);
+                if(secondRightTilePossibleMoves.length === 0){
+                    chessState.chessPieces[row][col + 2].boardState = 'move';
+                }
+            }
+        }
 
-        if(firstRightTilePossibleMoves.length === 2 && (firstRightTilePossibleMoves[0].piece === 'wk' || firstRightTilePossibleMoves[0].piece === 'wr') && (firstRightTilePossibleMoves[0].piece === 'wk' || firstRightTilePossibleMoves[0].piece === 'wr')){
-            const secondRightTilePossibleMoves = checkPossibleMovesOnATile(isWhite, chessState, row, col + 2);
-            if(secondRightTilePossibleMoves.length === 1 && secondRightTilePossibleMoves[0].piece === 'wr'){
-                chessState.chessPieces[row][col + 2].boardState = 'move';
+    }
+
+    // Check if can right castle
+    const leftCastlePossible = chessState.chessPieces[row][col - 1].piece === ' ' && chessState.chessPieces[row][col - 2].piece === ' ' && chessState.chessPieces[row][col - 3].piece === ' ';
+    const leftKingAndRookHasntMoved = isWhite 
+        ? 
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col - 4].piece === 'wr' && chessState.chessPieces[row][col - 4].possibleCastle
+        :
+        chessState.chessPieces[row][col].possibleCastle && chessState.chessPieces[row][col - 4].piece === 'br' && chessState.chessPieces[row][col - 4].possibleCastle
+
+    if(leftCastlePossible && leftKingAndRookHasntMoved) {
+        // Check if the king is not in check
+        const kingIsChecked = checkPossibleMovesOnATile(!isWhite, chessState, row, col);
+        if(kingIsChecked.length === 0){
+            // Check if the king is not in check in the way
+            const firstLeftPossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col - 1);
+            if(firstLeftPossibleMoves.length === 0){
+                const secondLeftPossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col - 2);
+                if(secondLeftPossibleMoves.length === 0){
+                    const thirdLeftTilePossibleMoves = checkPossibleMovesOnATile(!isWhite, chessState, row, col - 3);
+                    if(thirdLeftTilePossibleMoves.length === 0){
+                        chessState.chessPieces[row][col - 2].boardState = 'move';
+                    }
+                }
             }
         }
     }
+
 
     for(let i = 0; i < kingMoves.length; i++) {
         let move = kingMoves[i];
@@ -459,7 +493,7 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
                 }
             }
         }
-        if(row <= 6){
+        if(row <= 5){
             if(col >= 1){
                 if(chessState.chessPieces[row + 2][col - 1].piece === 'wn'){
                     possibleMoves.push({row: row + 2, col: col - 1, move: 'both', piece: 'wn'});
@@ -512,7 +546,7 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
                 }
             }
         }
-        if(row <= 6){
+        if(row <= 5){
             if(col >= 1){
                 if(chessState.chessPieces[row + 2][col - 1].piece === 'bn'){
                     possibleMoves.push({row: row + 2, col: col - 1, move: 'both', piece: 'bn'});
@@ -525,7 +559,7 @@ export function checkPossibleMovesOnATile(isWhite, chessState, row, col) {
                 }
             }
         }
-        if(row <= 7){
+        if(row <= 6){
             if(col >= 2){
                 if(chessState.chessPieces[row + 1][col - 2].piece === 'bn'){
                     possibleMoves.push({row: row + 1, col: col - 2, move: 'both', piece: 'bn'});

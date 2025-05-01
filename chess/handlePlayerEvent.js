@@ -96,6 +96,41 @@ export function handlePlayerPick(chessState, move) {
         }
     }
 
+    // Check if the piece is a king
+    if(piece === 'wk' || piece === 'bk') {
+        // Check if the king is castling
+        if(Math.abs(col - fromCol) == 2) {
+            if(chessState.state === 'playerWPick') {
+                if(chessState.chessPieces[row][col + 1].piece === 'wr') { // Castling right
+                    chessState.chessPieces[row][col + 1].possibleCastle = false;
+                    chessState.chessPieces[row][col - 1] = chessState.chessPieces[row][col + 1];
+                    chessState.chessPieces[row][col + 1] = {piece: ' '};
+                }else if(chessState.chessPieces[row][col - 2].piece === 'wr') { // Castling left
+                    chessState.chessPieces[row][col - 2].possibleCastle = false;
+                    chessState.chessPieces[row][col + 1] = chessState.chessPieces[row][col - 2];
+                    chessState.chessPieces[row][col - 2] = {piece: ' '};
+                }
+            }else if(chessState.state === 'playerBPick') {
+                if(chessState.chessPieces[row][col + 1].piece === 'br') { // Castling right
+                    chessState.chessPieces[row][col + 1].possibleCastle = false;
+                    chessState.chessPieces[row][col - 1] = chessState.chessPieces[row][col + 1];
+                    chessState.chessPieces[row][col + 1] = {piece: ' '};
+                }else if(chessState.chessPieces[row][col - 2].piece === 'br') { // Castling left
+                    chessState.chessPieces[row][col - 2].possibleCastle = false;
+                    chessState.chessPieces[row][col + 1] = chessState.chessPieces[row][col - 2];
+                    chessState.chessPieces[row][col - 2] = {piece: ' '};
+                }
+            }
+        }
+
+        chessState.chessPieces[fromRow][fromCol].possibleCastle = false; // Neutralize the possible castle state
+    }
+
+    // Check if the piece is a rook
+    if(piece === 'wr' || piece === 'br') {
+        chessState.chessPieces[fromRow][fromCol].possibleCastle = false; // Neutralize the possible castle state
+    }
+
     // Check for en passant move
     if(chessState.chessPieces[row][col].boardState === 'enPassant') {
         if(chessState.state === 'playerWPick') {
