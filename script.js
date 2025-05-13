@@ -23,6 +23,8 @@ function handleMenuClick(event) {
     menuEventListener(event, menuCanvasState)
 }
 
+// console.log(Math.floor(4 / 5))
+
 export function changeGameState(newState){
     canvas.removeEventListener('click', handleMenuClick);
     canvas.removeEventListener('click', handlePlayerMoveClick);

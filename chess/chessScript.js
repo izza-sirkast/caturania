@@ -7,6 +7,8 @@ export function renderChess(canvasState, chessState) {
     // Write whose turn it is
     renderTurnText(chessState, canvasState);
 
+    renderCapturedPieces(chessState, canvasState);
+
     // Draw menu button
     canvasState.ctx.fillStyle = 'black';
     canvasState.ctx.fillRect(canvasState.menuButton.x, canvasState.menuButton.y, canvasState.menuButton.width, canvasState.menuButton.height);
@@ -49,11 +51,48 @@ export function renderChess(canvasState, chessState) {
 
 }
 
-
 function renderTurnText(chessState, canvasState) {
     canvasState.ctx.fillStyle = 'black';
     canvasState.ctx.font = '40px monospace';
     canvasState.ctx.fillText(chessState.state === 'playerWTurn' || chessState.state === 'playerWPick' ? 'White Turn' : 'Black Turn', canvasState.startX - 280, canvasState.startY + 20);
+}
+
+function renderCapturedPieces(chessState, canvasState) {
+    canvasState.ctx.fillStyle = 'black';
+    canvasState.ctx.fillRect(canvasState.capturedWhitePieces.x, canvasState.capturedWhitePieces.y, canvasState.capturedWhitePieces.width, canvasState.capturedWhitePieces.height)
+
+    // render captured white pieces
+    canvasState.ctx.fillStyle = 'white';
+    canvasState.ctx.font = '40px Arial';
+    for(let i = 0; i < chessState.capturedWhitePieces.length; i++){
+        let col = i % 5;
+        let row = Math.floor(i / 5);
+
+        // console.log(i, col, row)
+        
+        canvasState.ctx.fillStyle = 'white';
+        canvasState.ctx.font = '40px Arial';
+        switch(chessState.capturedWhitePieces[i].piece){
+            case 'wp':
+                canvasState.ctx.fillText('♙', canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'wr':
+                canvasState.ctx.fillText('♖',  canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'wn':
+                canvasState.ctx.fillText('♘',  canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'wb':
+                canvasState.ctx.fillText('♗',  canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'wq':
+                canvasState.ctx.fillText('♕',  canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'wk':
+                canvasState.ctx.fillText('♔',  canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+        }
+    }
 }
 
 function renderTile(i, j, canvasState) {

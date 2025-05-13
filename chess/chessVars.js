@@ -10,7 +10,7 @@ export let chessState = {
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
-        [{piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
+        [{piece:' '}, {piece:'bp', twoStepUsed:false}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}, {piece:' '}],
         [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
         [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece: 'wb'}, {piece:'wn'}, {piece:'wr',possibleCastle:true}]
     ],
@@ -76,6 +76,18 @@ export function initChessCanvasState(ctx) {
         height: 40,
         text: 'Restart',
         textSize: 30
+    }
+
+    chessCanvasState.capturedWhitePieces = {
+        x: chessCanvasState.startX + (chessCanvasState.tileSize * 8) + 70,
+        y: chessCanvasState.startY,
+        width: chessCanvasState.tileSize * 5,
+        height: chessCanvasState.tileSize * 4
+    }
+
+    chessCanvasState.capturedBlackPieces = {
+        x: chessCanvasState.startX + (chessCanvasState.tileSize * 8) + 70,
+        y: chessCanvasState.startY,
     }
 
     return chessCanvasState;
