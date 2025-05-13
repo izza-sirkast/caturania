@@ -14,6 +14,8 @@ export let chessState = {
         [{piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}, {piece:'wp', twoStepUsed:false}],
         [{piece:'wr', possibleCastle:true}, {piece:'wn'}, {piece:'wb'}, {piece:'wq'}, {piece:'wk', possibleCastle:true}, {piece: 'wb'}, {piece:'wn'}, {piece:'wr',possibleCastle:true}]
     ],
+    capturedWhitePieces: [], // structure: {piece, pos:{row,col}}
+    capturedBlackPieces: [],
     // chessPieces: [
     //     [{piece:'br',possibleCastle:true},{piece:' '}, {piece:' '}, {piece:' '}, {piece:'bk',possibleCastle:true}, {piece:' '}, {piece:' '}, {piece:'br',possibleCastle:true}],
     //     [{piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}, {piece:'bp', twoStepUsed:false}],
