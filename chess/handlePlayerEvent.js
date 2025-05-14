@@ -134,11 +134,22 @@ export function handlePlayerPick(chessState, move) {
     // Check for en passant move
     if(chessState.chessPieces[row][col].boardState === 'enPassant') {
         if(chessState.state === 'playerWPick') {
+            chessState.capturedBlackPieces.push({piece:chessState.chessPieces[row + 1][col].piece, pos:{row: row + 1, col}});
             chessState.chessPieces[row + 1][col] = {piece: ' '};
         }else if(chessState.state === 'playerBPick') {
+            chessState.capturedWhitePieces.push({piece:chessState.chessPieces[row - 1][col].piece, pos:{row: row - 1, col}});
             chessState.chessPieces[row - 1][col] = {piece: ' '};
         }
     } 
+
+    // Check for capturing move
+    if(chessState.chessPieces[row][col].boardState === "eat") {
+        if(chessState.state === 'playerWPick') {
+            chessState.capturedBlackPieces.push({piece:chessState.chessPieces[row][col].piece, pos:{row, col}})
+        }else if(chessState.state === 'playerBPick') {
+            chessState.capturedWhitePieces.push({piece:chessState.chessPieces[row][col].piece, pos:{row, col}})
+        }
+    }
 
 
     // Neutralize the board state
