@@ -61,14 +61,15 @@ function renderCapturedPieces(chessState, canvasState) {
     canvasState.ctx.fillStyle = 'black';
     canvasState.ctx.fillRect(canvasState.capturedWhitePieces.x, canvasState.capturedWhitePieces.y, canvasState.capturedWhitePieces.width, canvasState.capturedWhitePieces.height)
 
+    canvasState.ctx.fillStyle = 'white';
+    canvasState.ctx.fillRect(canvasState.capturedBlackPieces.x, canvasState.capturedBlackPieces.y, canvasState.capturedBlackPieces.width, canvasState.capturedBlackPieces.height)
+
     // render captured white pieces
     canvasState.ctx.fillStyle = 'white';
     canvasState.ctx.font = '40px Arial';
     for(let i = 0; i < chessState.capturedWhitePieces.length; i++){
         let col = i % 5;
         let row = Math.floor(i / 5);
-
-        // console.log(i, col, row)
         
         canvasState.ctx.fillStyle = 'white';
         canvasState.ctx.font = '40px Arial';
@@ -90,6 +91,35 @@ function renderCapturedPieces(chessState, canvasState) {
                 break;
             case 'wk':
                 canvasState.ctx.fillText('♔',  canvasState.capturedWhitePieces.x + col * canvasState.tileSize + 5, canvasState.capturedWhitePieces.y + row * canvasState.tileSize + 40);
+                break;
+        }
+    }
+
+    // render captured black pieces
+    canvasState.ctx.fillStyle = 'black';
+    canvasState.ctx.font = '40px Arial';
+    for(let i = 0; i < chessState.capturedBlackPieces.length; i++){
+        let col = i % 5;
+        let row = 3 - Math.floor(i / 5);
+       
+        switch(chessState.capturedBlackPieces[i].piece){
+            case 'bp':
+                canvasState.ctx.fillText('♙', canvasState.capturedBlackPieces.x + col * canvasState.tileSize + 5, canvasState.capturedBlackPieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'br':
+                canvasState.ctx.fillText('♖',  canvasState.capturedBlackPieces.x + col * canvasState.tileSize + 5, canvasState.capturedBlackPieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'bn':
+                canvasState.ctx.fillText('♘',  canvasState.capturedBlackPieces.x + col * canvasState.tileSize + 5, canvasState.capturedBlackPieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'bb':
+                canvasState.ctx.fillText('♗',  canvasState.capturedBlackPieces.x + col * canvasState.tileSize + 5, canvasState.capturedBlackPieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'bq':
+                canvasState.ctx.fillText('♕',  canvasState.capturedBlackPieces.x + col * canvasState.tileSize + 5, canvasState.capturedBlackPieces.y + row * canvasState.tileSize + 40);
+                break;
+            case 'bk':
+                canvasState.ctx.fillText('♔',  canvasState.capturedBlackPieces.x + col * canvasState.tileSize + 5, canvasState.capturedBlackPieces.y + row * canvasState.tileSize + 40);
                 break;
         }
     }

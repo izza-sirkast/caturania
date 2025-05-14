@@ -85,9 +85,12 @@ export function initChessCanvasState(ctx) {
         height: chessCanvasState.tileSize * 4
     }
 
+
     chessCanvasState.capturedBlackPieces = {
         x: chessCanvasState.startX + (chessCanvasState.tileSize * 8) + 70,
-        y: chessCanvasState.startY,
+        y: chessCanvasState.startY + (chessCanvasState.tileSize * 4),
+        width: chessCanvasState.tileSize * 5,
+        height: chessCanvasState.tileSize * 4
     }
 
     return chessCanvasState;
